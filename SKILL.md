@@ -1,6 +1,6 @@
 ---
 name: website-prompt-generator
-description: Generate highly detailed, component-by-component prompts and blueprints for building websites based on user ideas. Automatically integrates the UI/UX design intelligence of the ui-ux-pro-max database (67 styles, 96 palettes, 57 typography pairings, and 99 UX guidelines). Trigger this skill whenever the user asks for a website prompt, landing page specifications, or a frontend build guide (React, Tailwind, Framer Motion, HTML, Next.js, Svelte, Vue, shadcn/ui), or uploads reference images/UI mockups.
+description: Generate highly detailed, component-by-component prompts and blueprints for building websites based on user ideas. Automatically integrates the UI/UX design intelligence of the ui-ux-pro-max database (67 styles, 96 palettes, 57 typography pairings, and 99 UX guidelines). Trigger this skill whenever the user asks for a website prompt, landing page specifications, or a frontend build guide (React, Tailwind, Framer Motion, HTML, Next.js, Svelte, Vue, shadcn/ui, Anime.js), or uploads reference images/UI mockups, or asks for complex animations using animejs / anime.js (timelines, stagger, scroll, drag and drop, SVG morphing).
 ---
 
 # Website Prompt Generator
@@ -81,6 +81,7 @@ In active conversations, present a brief summary of the design tokens (retrieved
 Act as an expert technical UI/UX designer and frontend architect. The resulting prompt must leave nothing to the imagination — specify the exact tech stack, colors, typography, layout, animations, and content structure. Incorporate all findings from **Step 0: UI/UX Design Intelligence Retrieval**.
 
 **CRITICAL STEP**: This skill comes bundled with a universal component-prompt library in `references/animated-web-prompts.md`. Before generating, use `grep_search` or `view_file` to find 1–3 entries that match the user's requested style or domain. **Analyze** them — study their structure, level of technical specificity, the bracket/placeholder convention, and the animation techniques — then generate a **completely new** prompt with your own components and animations. Do NOT copy a sample verbatim or hand the library text back as the output: the samples set the quality bar and demonstrate the format, they are not the deliverable. Do not skip this step!
+Additionally, if Anime.js is requested or is optimal for the animation requirements (like SVG morphing/drawing, complex stagger grids, or custom timelines), load `references/animejs-api-reference.md` and `references/animejs-examples.md` to ensure correct syntax, tree-shakeable imports, and clean React component structures (using `createScope` for component lifecycle cleanup).
 
 ### Output Format (Text Mode)
 
@@ -101,7 +102,7 @@ Build a [type of site] with [key visual features].
 Tech Stack
 - React + Vite + TypeScript
 - Tailwind CSS
-- Framer Motion
+- Framer Motion (for standard React transitions) or Anime.js (v4) (for complex timeline-based, SVG path/morph, grid stagger, drag-and-drop, or scroll-linked animations)
 - Lucide React
 
 Fonts
@@ -210,9 +211,9 @@ One-line concept · who it's for · overall vibe and motion language.
 ## 2. Tech Stack
 - React + Vite + TypeScript
 - Tailwind CSS
-- Framer Motion
+- Framer Motion or Anime.js (v4)
 - Lucide React
-- (Add GSAP + ScrollTrigger, Lenis, Three.js/R3F, Recharts only if the images imply them)
+- (Add GSAP + ScrollTrigger, Lenis, Three.js/R3F, Recharts, or Anime.js SVG/Draggable plugins only if the images or requirements imply them)
 
 ## 3. Design System & UI/UX Rationale
 ### Global Design System Reference
@@ -313,16 +314,20 @@ Do NOT load all reference files at once. Load only what you need for the current
 | `references/ui-analysis-system.md` | Image Blueprint Mode (always) | How to decode layouts, colors, type, surfaces, spacing, components, and motion from images. Includes the Quick Checklist. |
 | `references/design-system-tokens.md` | Any time you need exact CSS values | Color palette templates (6 presets), typography scales, Google Fonts pairings, spacing tokens, shadow recipes, motion tokens, full CSS variable blocks. |
 | `references/section-patterns.md` | When a matched section type is identified | 11 section categories with complete build specs: nav, hero, features, about, cards, testimonials, pricing, CTA, marquee, footer, animation wrappers. |
+| `references/animejs-api-reference.md` | When Anime.js is requested or chosen | Full API documentation for Anime.js v4, including timers, animations, timelines, stagger, scroll observers, draggable components, SVG morphing/drawing, and React integration rules. |
+| `references/animejs-examples.md` | When Anime.js is requested or chosen | Common Anime.js v4 animation recipes, timelines, scroll behaviors, SVG shape morphing, text splitting, UI toggle transitions, and React hooks. |
 
 ### Loading sequence for Image Blueprint Mode
 1. Run Step 0 (UI/UX Pro Max search command for design system and optional stack).
 2. Load `ui-analysis-system.md` → run the Quick Checklist on every image.
 3. Load `design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
 4. Load `section-patterns.md` → match each image to a section pattern.
-5. Grep `animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
+5. If using Anime.js, load `animejs-api-reference.md` and `animejs-examples.md` to reference correct implementation APIs and code snippets.
+6. Grep `animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
 
 ### Loading sequence for Text Mode
 1. Run Step 0 (UI/UX Pro Max search command for design system and stack).
-2. Grep `animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
-3. Load `design-system-tokens.md` if you need to define additional CSS variables or font details.
-4. Load `section-patterns.md` if a specific section type needs a detailed build spec.
+2. If using Anime.js, load `animejs-api-reference.md` and `animejs-examples.md`.
+3. Grep `animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
+4. Load `design-system-tokens.md` if you need to define additional CSS variables or font details.
+5. Load `section-patterns.md` if a specific section type needs a detailed build spec.

@@ -477,6 +477,170 @@ const Magnet = ({ children, padding = 100, strength = 3 }) => {
         willChange: 'transform'
       }}
     >{children}</div>
+};
+```
+
+### Anime.js Animation Wrappers (React)
+
+### AnimeFadeIn
+```tsx
+import { useRef, useEffect } from 'react';
+import { animate, createScope } from 'animejs';
+
+export const AnimeFadeIn = ({ children, delay = 0, duration = 600, y = 24 }) => {
+  const containerRef = useRef(null);
+  const scopeRef = useRef(null);
+
+  useEffect(() => {
+    scopeRef.current = createScope({ root: containerRef.current }).add(() => {
+      animate(containerRef.current, {
+        opacity: [0, 1],
+        translateY: [y, 0],
+        duration: duration,
+        delay: delay,
+        ease: 'outExpo'
+      });
+    });
+    return () => scopeRef.current?.revert();
+  }, [delay, duration, y]);
+
+  return (
+    <div ref={containerRef} style={{ opacity: 0 }}>
+      {children}
+    </div>
   );
 };
 ```
+
+### AnimeWordsPullUp
+```tsx
+import { useRef, useEffect } from 'react';
+import { animate, stagger, createScope } from 'animejs';
+
+export const AnimeWordsPullUp = ({ text, className, delay = 0 }) => {
+  const containerRef = useRef(null);
+  const scopeRef = useRef(null);
+  const words = text.split(' ');
+
+  useEffect(() => {
+    scopeRef.current = createScope({ root: containerRef.current }).add(() => {
+      animate('.word-span', {
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 600,
+        delay: stagger(80, { start: delay }),
+        ease: 'outExpo'
+      });
+    });
+    return () => scopeRef.current?.revert();
+  }, [text, delay]);
+
+  return (
+    <div ref={containerRef} className={`flex flex-wrap gap-x-[0.3em] ${className}`}>
+      {words.map((word, i) => (
+        <span key={i} className="word-span inline-block" style={{ opacity: 0 }}>
+          {word}
+        </span>
+      ))}
+    </div>
+  );
+};
+```
+
+### AnimeScrollReveal (character scroll-opacity)
+```tsx
+import { useRef, useEffect } from 'react';
+import { animate, onScroll, createScope } from 'animejs';
+
+export const AnimeScrollReveal = ({ text, className }) => {
+  const containerRef = useRef(null);
+  const scopeRef = useRef(null);
+  const chars = text.split('');
+
+  useEffect(() => {
+    scopeRef.current = createScope({ root: containerRef.current }).add(() => {
+      animate('.char-span', {
+        opacity: [0.2, 1],
+        autoplay: onScroll({
+          target: containerRef.current,
+          sync: true,
+          enter: 'top 80%',
+          leave: 'bottom 20%'
+        })
+      });
+    });
+    return () => scopeRef.current?.revert();
+  }, [text]);
+
+  return (
+    <p ref={containerRef} className={className}>
+      {chars.map((char, i) => (
+        <span key={i} className="char-span inline-block">
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </p>
+  );
+};
+```
+
+### AnimeMagnet (cursor-following)
+```tsx
+import { useRef, useEffect } from 'react';
+import { animate } from 'animejs';
+
+export const AnimeMagnet = ({ children, padding = 100, strength = 3 }) => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const handleMouseMove = (e) => {
+      const rect = el.getBoundingClientRect();
+      const elX = rect.left + rect.width / 2;
+      const elY = rect.top + rect.height / 2;
+      const dist = Math.hypot(e.clientX - elX, e.clientY - elY);
+
+      if (dist < padding) {
+        const x = (e.clientX - elX) / strength;
+        const y = (e.clientY - elY) / strength;
+        animate(el, {
+          translateX: x,
+          translateY: y,
+          duration: 300,
+          ease: 'outQuad',
+          composition: 'replace'
+        });
+      } else {
+        handleMouseLeave();
+      }
+    };
+
+    const handleMouseLeave = () => {
+      animate(el, {
+        translateX: 0,
+        translateY: 0,
+        duration: 600,
+        ease: 'outElastic(1, 0.6)',
+        composition: 'replace'
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    el.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      el.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [padding, strength]);
+
+  return (
+    <div ref={ref} className="inline-block will-change-transform">
+      {children}
+    </div>
+  );
+};
+```
+
