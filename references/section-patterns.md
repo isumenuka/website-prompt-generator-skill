@@ -644,3 +644,79 @@ export const AnimeMagnet = ({ children, padding = 100, strength = 3 }) => {
 };
 ```
 
+### GSAP ScrollTrigger Animation Wrappers (React)
+
+Make sure to install `gsap` and `@gsap/react` and register ScrollTrigger once.
+
+### GsapScrollReveal
+```tsx
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export const GsapScrollReveal = ({ children, start = 'top 80%', end = 'bottom 20%', y = 30 }) => {
+  const containerRef = useRef(null);
+
+  useGSAP(() => {
+    gsap.fromTo(containerRef.current, 
+      { opacity: 0, y: y },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: start,
+          end: end,
+          toggleActions: 'play none none reverse'
+        }
+      }
+    );
+  }, { scope: containerRef });
+
+  return (
+    <div ref={containerRef} style={{ opacity: 0 }}>
+      {children}
+    </div>
+  );
+};
+```
+
+### GsapScrollPin
+```tsx
+import { useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export const GsapScrollPin = ({ children, start = 'top top', end = '+=1000' }) => {
+  const wrapperRef = useRef(null);
+  const pinRef = useRef(null);
+
+  useGSAP(() => {
+    ScrollTrigger.create({
+      trigger: wrapperRef.current,
+      pin: pinRef.current,
+      start: start,
+      end: end,
+      pinSpacing: true
+    });
+  }, { scope: wrapperRef });
+
+  return (
+    <div ref={wrapperRef} className="w-full">
+      <div ref={pinRef} className="w-full">
+        {children}
+      </div>
+    </div>
+  );
+};
+```
+
+
