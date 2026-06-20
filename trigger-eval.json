@@ -1,0 +1,82 @@
+[
+  {
+    "query": "hey i want to build a cool landing page for my new mobile game. I have a few design screenshots in downloads (screenshot_1.png and screenshot_2.png) showing the main character and start menu. Can you make a detailed frontend prompt so I can build it in Lovable?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can you give me a solid build guide/prompt to create a modern portfolio page? I want something clean, minimal, using React and Framer Motion for scroll animations, particularly an editorial feel for displaying my photography projects.",
+    "should_trigger": true
+  },
+  {
+    "query": "need a next.js tailwind dashboard prompt. it should be a fintech application for showing real-time stock charts. make it dark mode, sleek, high-end, and let me know how to build it step by step",
+    "should_trigger": true
+  },
+  {
+    "query": "i have this UI mockup from my designer (aura-beauty-v2.jpg) for a beauty salon. can you generate a detailed web layout spec for this so i can copy-paste it into cursor?",
+    "should_trigger": true
+  },
+  {
+    "query": "i want to build a simple svelte page for my recipe tracker. can you write a detailed specification of the visual components, transitions, and layout structure so the coder knows exactly what to do?",
+    "should_trigger": true
+  },
+  {
+    "query": "can you build a frontend blueprint for an admin dashboard? here are the mockups: dashboard_main.png and user_settings.png. make sure to define the colors and spacing carefully",
+    "should_trigger": true
+  },
+  {
+    "query": "Write a highly detailed component-by-component build guide for a SaaS pricing page. I want a bento grid style, playful animations, orange CTAs, and a soft light theme.",
+    "should_trigger": true
+  },
+  {
+    "query": "i have a video clip (app_navigation_flow.mov) showing how the transition between pages should look in our mobile view. can you generate a motion-focused layout prompt from it?",
+    "should_trigger": true
+  },
+  {
+    "query": "i want to make a cinematic portfolio for a film director. need a full build prompt with animations, colors, fonts, and responsive grid layouts",
+    "should_trigger": true
+  },
+  {
+    "query": "please design a layout blueprint for a product page from this sketch: product_wireframe.png. include details for spacing, glassmorphic cards, and hover states.",
+    "should_trigger": true
+  },
+  {
+    "query": "can you write a python script to parse logs from our web server? the log file is in logs/nginx_access.log and i want to extract count of 404 errors",
+    "should_trigger": false
+  },
+  {
+    "query": "how do i configure a PostgreSQL database to handle fast reads for a multi-tenant SaaS application? should i use indexes on tenant_id?",
+    "should_trigger": false
+  },
+  {
+    "query": "write a backend express api route to handle user registration. it should hash passwords with bcrypt and save to MongoDB",
+    "should_trigger": false
+  },
+  {
+    "query": "can you analyze this PDF report (Q4_financials.pdf) and extract the table on page 4 showing revenue by region? write the results as a CSV",
+    "should_trigger": false
+  },
+  {
+    "query": "My svelte page is showing a blank screen on load. Can you help me debug this error in my console: Uncaught TypeError: Cannot read properties of undefined (reading 'map')?",
+    "should_trigger": false
+  },
+  {
+    "query": "how do i add unit tests for my React components using Vitest and React Testing Library? write a sample test for a simple button click",
+    "should_trigger": false
+  },
+  {
+    "query": "can you deploy this folder to vercel? it has an index.html and styles.css. use the vercel CLI or vercel MCP if you have it",
+    "should_trigger": false
+  },
+  {
+    "query": "write a typescript function to sort an array of objects by a date field in descending order",
+    "should_trigger": false
+  },
+  {
+    "query": "analyze the security vulnerabilities in this package.json file. are there any outdated dependencies with high CVEs?",
+    "should_trigger": false
+  },
+  {
+    "query": "can you help me write an article about the history of web design from the 90s to today? focus on table-based layouts vs grid layouts",
+    "should_trigger": false
+  }
+]

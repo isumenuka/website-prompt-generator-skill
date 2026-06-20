@@ -1,6 +1,6 @@
 ---
 name: website-prompt-generator
-description: Generate highly detailed, component-by-component prompts for building websites based on user ideas. Trigger this skill whenever the user asks for a prompt, a detailed specification, or a build guide for a new website, landing page, or web application, especially if they mention wanting something cinematic, modern, or using React/Tailwind/Framer Motion. ALSO trigger when the user uploads reference images, screenshots, mockups, or UI designs and wants a prompt or blueprint built from them — even if they don't say "website-prompt-generator" explicitly. If reference images are provided alongside any website/build request, always enter Image Blueprint Mode.
+description: Generate highly detailed, component-by-component prompts and blueprints for building websites based on user ideas. Automatically integrates the UI/UX design intelligence of the ui-ux-pro-max database (67 styles, 96 palettes, 57 typography pairings, and 99 UX guidelines). Trigger this skill whenever the user asks for a website prompt, landing page specifications, or a frontend build guide (React, Tailwind, Framer Motion, HTML, Next.js, Svelte, Vue, shadcn/ui), or uploads reference images/UI mockups.
 ---
 
 # Website Prompt Generator
@@ -23,13 +23,62 @@ If images are present but you can't view them, ask the user to re-upload or past
 
 ---
 
+## 🎨 Step 0: UI/UX Design Intelligence Retrieval & Application (REQUIRED)
+
+Before writing any build prompt or blueprint, execute the bundled search script in this skill to retrieve layout, typography, and color recommendations. Relying on this curated database ensures that the generated design system is industry-tested, accessibility-compliant, and perfectly matched to the product's business domain, rather than relying on guessed or generic color choices.
+
+### 1. Extract Key Attributes
+From the user's description or reference images, identify:
+- **Product Type / Industry**: (e.g., SaaS, fintech, beauty/spa, education, portfolio, medical, e-commerce)
+- **Visual Keywords / Vibe**: (e.g., minimal, glassmorphism, dark mode, brutalism, soft UI, luxury)
+- **Target Stack**: (e.g., `html-tailwind` (default), `react`, `nextjs`, `vue`, `svelte`, `swiftui`, `react-native`, `flutter`, `shadcn`, `jetpack-compose`, `astro`, `nuxt-ui`, `nuxtjs`)
+
+### 2. Execute UI/UX Pro Max CLI Commands
+Run the following terminal commands in the workspace using the `run_command` tool to fetch design system parameters and stack guidelines:
+
+- **Generate Complete Design System**:
+  ```bash
+  py .agents/skills/website-prompt-generator-skill-main/scripts/search.py "<product_type> <industry> <visual keywords>" --design-system -p "Project Name"
+  ```
+  *Tip*: If this is a multi-page web app or requires persistence, append `--persist` to save the design system globally to `design-system/MASTER.md` (Global Source of Truth) and page-specific overrides to `design-system/pages/[page-slug].md`. In the generated build prompt, explicitly instruct the developer tool to check and follow these markdown files.
+
+- **Fetch Stack Guidelines** (run this if a specific tech stack is requested or chosen):
+  ```bash
+  py .agents/skills/website-prompt-generator-skill-main/scripts/search.py "<layout/component/responsive keywords>" --stack <stack_name>
+  ```
+
+- **Fetch Domain Guidelines** (if you need specific guidelines on `ux`, `accessibility`, `animation`, `landing`, or `chart`):
+  ```bash
+  py .agents/skills/website-prompt-generator-skill-main/scripts/search.py "<topic keywords>" --domain <domain_name>
+  ```
+
+### 3. Parse and Blend Results
+Parse the console output of these scripts and apply them as follows:
+- **Palette**: Map the exact primary, secondary, background, text, and CTA HEX/HSL colors from the script output directly into the CSS variable template.
+- **Typography**: Apply the recommended Google Fonts pairings (including specific weights and CSS import links) to the heading and body fonts.
+- **Key Effects**: Implement specific effects returned by the database (e.g. "frosted glass", "subtle depth shadows", "clear 3px focus rings").
+- **Constraints / Anti-patterns**: Extract the "AVOID" warnings (e.g. "no neon colors", "no confusing booking flows", "no scale transforms that cause layout shift") and list them under a **Constraints** section.
+
+### 4. Enforce Visual Quality Guidelines
+Your output prompt/blueprint must explicitly instruct the developer tool to adhere to these core rules from the `ui-ux-pro-max` checklist, which are critical for achieving a premium visual design:
+- **Icons & Visual Elements**: Use Lucide, Heroicons, or official brand SVGs from Simple Icons. Emojis must not be used as UI icons, as they look unpolished and unprofessional in a premium design.
+- **Transitions & Hover**: Standardize transition speeds between 150ms and 300ms (e.g., `transition-colors duration-200`). Transitions outside this range feel either sluggish or too harsh. Ensure every hoverable or clickable element has `cursor-pointer` to signal interactivity to the user. Hover effects should avoid scaling transforms that shift other elements in the layout.
+- **Light/Dark Contrast**: Ensure a minimum contrast ratio of 4.5:1 for normal body text to guarantee readability. For glass elements in light mode, use a high-opacity layer (`bg-white/80` or higher) and a visible light gray border (`border-gray-200`) to prevent the card from washing out against a light background.
+- **Layout & Spacing**: Floating navbars should have offset margins (such as `top-4 left-4 right-4`) to prevent them from feeling cramped against window edges. Avoid overlapping elements unless intentionally layered with explicit z-index values. Maintain a consistent container width (e.g., `max-w-6xl` or `max-w-7xl`).
+- **Accessibility**: Ensure keyboard focus rings are visible to help keyboard-only navigation. All form fields must have descriptive labels, all images must have alternative text, and transitions should respect the user's `prefers-reduced-motion` settings.
+
+### 5. Interactive Selection & Preview (Interactive Sessions Only)
+In active conversations, present a brief summary of the design tokens (retrieved primary/secondary/CTA colors, typography pairing, layout pattern, and a checklist) to the user for approval or adjustments **before** generating the final full build prompt/blueprint. This ensures user alignment.
+
+---
+
 ## 📝 Text Mode
 
 *Use this when no images are uploaded.*
 
 ### Approach
 
-Act as an expert technical UI/UX designer and frontend architect. The resulting prompt must leave nothing to the imagination — specify the exact tech stack, colors, typography, layout, animations, and content structure.
+Act as an expert technical UI/UX designer and frontend architect. The resulting prompt must leave nothing to the imagination — specify the exact tech stack, colors, typography, layout, animations, and content structure. Incorporate all findings from **Step 0: UI/UX Design Intelligence Retrieval**.
 
 **CRITICAL STEP**: This skill comes bundled with a universal component-prompt library in `references/animated-web-prompts.md`. Before generating, use `grep_search` or `view_file` to find 1–3 entries that match the user's requested style or domain. **Analyze** them — study their structure, level of technical specificity, the bracket/placeholder convention, and the animation techniques — then generate a **completely new** prompt with your own components and animations. Do NOT copy a sample verbatim or hand the library text back as the output: the samples set the quality bar and demonstrate the format, they are not the deliverable. Do not skip this step!
 
@@ -40,6 +89,14 @@ Wrap your entire output in a single ` ```markdown ` block so it's easy to copy-p
 ```
 Build Prompt: [Catchy Title of the Website]
 Build a [type of site] with [key visual features].
+
+## Global Design System Reference
+- Note: If persisted, the developer tool must inspect `design-system/MASTER.md` and page overrides under `design-system/pages/` as the single source of truth for design tokens.
+
+## UI/UX Design Rationale & Accessibility
+- Explain the cognitive logic behind the selected color palette (e.g., "Deep blue communicates fintech security; WCAG contrast is 5.2:1").
+- Detail why the typography pairing fits the product domain (e.g., "Instrument Serif adds luxury editorial feel, balanced by clean Barlow body text").
+- Explain the spacing rhythm and interactive transitions choice (e.g., "200ms ease-out on cards to keep responses feeling snappy but smooth").
 
 Tech Stack
 - React + Vite + TypeScript
@@ -124,15 +181,15 @@ Decide scroll order and role for each image:
 
 If multiple images repeat the same pattern, group them — don't force ten sections out of ten near-identical cards.
 
-### Step 3 — Load `design-system-tokens.md` and Derive the Global Design System
+### Step 3 — Load `design-system-tokens.md` and Blend with UI/UX Pro Max Design System
 
-**Load `references/design-system-tokens.md` now** — match the palette template (section 1) that most closely resembles the images, copy its CSS variables, and adjust hex values. Use section 7 (Motion Tokens) to define the site's motion language.
+**Load `references/design-system-tokens.md` now** — match the palette template that most closely resembles the images, copy its CSS variables, and adjust hex values.
 
-From the combined images, lock in:
-- **Palette**: CSS vars (`--bg`, `--fg`, `--accent`, etc.) with exact hex values
-- **Typography**: Families + weights + `clamp()` scale + tracking/leading
-- **Spacing / radius / elevation**: Section padding rhythm, container max-width, corner radii, shadow recipes
-- **Motion language**: One sentence describing the feel + the default easing and duration to reuse everywhere (e.g., `ease: [0.22, 1, 0.36, 1]`, `~0.6s`)
+Then, blend these with the output of the **Step 0 UI/UX Pro Max** search results. Lock in the absolute design variables:
+- **Palette**: Inferred CSS variables with exact HSL/HEX values from both visual findings and the Pro Max recommended design system.
+- **Typography**: Families + weights + `clamp()` scale + tracking/leading (using the Google Fonts pairings returned by the Pro Max script).
+- **Spacing / radius / elevation**: Section padding rhythm, container max-width, corner radii, shadow recipes (utilize the specific Pro Max guidelines on Spacing & Interaction).
+- **Motion language**: Default easing and duration (e.g., `ease: [0.22, 1, 0.36, 1]`, `~0.6s`) plus specific hover/load guidelines.
 
 ### Step 4 — Load `section-patterns.md` then Write the Blueprint Prompt
 
@@ -157,16 +214,20 @@ One-line concept · who it's for · overall vibe and motion language.
 - Lucide React
 - (Add GSAP + ScrollTrigger, Lenis, Three.js/R3F, Recharts only if the images imply them)
 
-## 3. Design System
-### Color
+## 3. Design System & UI/UX Rationale
+### Global Design System Reference
+- Note: If persisted, the developer tool must inspect `design-system/MASTER.md` and page overrides under `design-system/pages/` as the single source of truth for design tokens.
+### Color & Typography Rationale
+- Explain the visual and cognitive reasons for the selected palette and font pairings (e.g., "WCAG AA contrast compliant at 5.5:1, utilizing dark mode background to reduce eye strain for developers").
 - CSS vars with precise hex: --bg, --fg, --muted, --accent, --glow
 ### Typography
 - Headings: family, weights, clamp() scale, tracking, leading
 - Body: family, weights, size scale
 ### Spacing / Radius / Elevation
 - Section padding rhythm, max-w, radii, shadow recipes
-### Motion Language
+### Motion Language & Accessibility
 - Default easing + duration (e.g., ease: [0.22, 1, 0.36, 1], ~0.6s). One sentence describing the feel.
+- Transition curves, focus rings, and prefers-reduced-motion accommodations.
 
 ## 4. Global Styles / Utilities
 - Only utilities the images imply: .glass, noise overlay, gradient text, custom scrollbar, dotted-grid bg.
@@ -254,12 +315,14 @@ Do NOT load all reference files at once. Load only what you need for the current
 | `references/section-patterns.md` | When a matched section type is identified | 11 section categories with complete build specs: nav, hero, features, about, cards, testimonials, pricing, CTA, marquee, footer, animation wrappers. |
 
 ### Loading sequence for Image Blueprint Mode
-1. Load `ui-analysis-system.md` → run the Quick Checklist on every image
-2. Load `design-system-tokens.md` → match the palette template and lock CSS vars
-3. Load `section-patterns.md` → match each image to a section pattern
-4. Grep `animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording)
+1. Run Step 0 (UI/UX Pro Max search command for design system and optional stack).
+2. Load `ui-analysis-system.md` → run the Quick Checklist on every image.
+3. Load `design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
+4. Load `section-patterns.md` → match each image to a section pattern.
+5. Grep `animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
 
 ### Loading sequence for Text Mode
-1. Grep `animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new
-2. Load `design-system-tokens.md` if you need to define a color system or font pairing
-3. Load `section-patterns.md` if a specific section type needs a detailed spec
+1. Run Step 0 (UI/UX Pro Max search command for design system and stack).
+2. Grep `animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
+3. Load `design-system-tokens.md` if you need to define additional CSS variables or font details.
+4. Load `section-patterns.md` if a specific section type needs a detailed build spec.
