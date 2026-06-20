@@ -318,18 +318,24 @@ Do NOT load all reference files at once. Load only what you need for the current
 | `references/animejs-api-reference.md` | When Anime.js is requested or chosen | Full API documentation for Anime.js v4, including timers, animations, timelines, stagger, scroll observers, draggable components, SVG morphing/drawing, and React integration rules. |
 | `references/animejs-examples.md` | When Anime.js is requested or chosen | Common Anime.js v4 animation recipes, timelines, scroll behaviors, SVG shape morphing, text splitting, UI toggle transitions, and React hooks. |
 | `references/gsap-scrolltrigger-reference.md` | When GSAP/ScrollTrigger is requested or chosen | Official reference manual for GSAP ScrollTrigger — covers scroll-linked animations, pinning, scrubbing, toggle actions, batching, scroller proxying, and React integration. |
+| `references/motion/core-concepts-deep-dive.md` | When advanced Framer Motion features are needed | Deep dive into variants orchestration, custom spring physics, layout animations, exit animations, and gestures. |
+| `references/motion/performance-optimization.md` | When optimizing bundle size or list performance | LazyMotion setup, useAnimate hooks, virtualization, and GPU acceleration. |
+| `references/motion/nextjs-integration.md` | When building Next.js applications | "use client" boundaries, SSR/hydration issues, and route transitions. |
+| `references/motion/accessibility-guide.md` | When implementing WCAG / reduced-motion | Handling prefers-reduced-motion, ARIA tags, and screen readers. |
+| `references/motion/common-patterns.md` | When copying common Framer Motion component code | Modal dialogues, accordions, carousels, tabs, and toast notifications. |
+| `references/motion/motion-vs-auto-animate.md` | When choosing between Framer Motion and AutoAnimate | Feature comparison and selection matrix. |
 
 ### Loading sequence for Image Blueprint Mode
 1. Run Step 0 (UI/UX Pro Max search command for design system and optional stack).
 2. Load `ui-analysis-system.md` → run the Quick Checklist on every image.
 3. Load `design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
 4. Load `section-patterns.md` → match each image to a section pattern.
-5. If using Anime.js or GSAP, load their respective reference manuals (`animejs-api-reference.md` / `animejs-examples.md` or `gsap-scrolltrigger-reference.md`) to reference correct implementation APIs and code snippets.
+5. If using Anime.js, GSAP, or advanced Framer Motion, load their respective reference manuals/folders (`animejs-api-reference.md` / `animejs-examples.md`, `gsap-scrolltrigger-reference.md`, or `references/motion/`) to reference correct implementation APIs and code snippets.
 6. Grep `animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
 
 ### Loading sequence for Text Mode
 1. Run Step 0 (UI/UX Pro Max search command for design system and stack).
-2. If using Anime.js or GSAP, load their respective reference files.
+2. If using Anime.js, GSAP, or advanced Framer Motion, load their respective reference files/folders.
 3. Grep `animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
 4. Load `design-system-tokens.md` if you need to define additional CSS variables or font details.
 5. Load `section-patterns.md` if a specific section type needs a detailed build spec.
