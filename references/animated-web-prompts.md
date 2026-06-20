@@ -614,3 +614,51 @@ Build a bottom footer bar, flex justify-[center | between]: a row of social icon
 GitHub] (each .liquid-glass rounded-full p-4 text-white/80 hover:text-white, with an aria-label), plus a green pulsing
 dot and the text "[Available for projects]". [Optional © line ?].
 ```
+
+---
+### 3D & SPLINE SCENES
+---
+
+## 53 · Spline 3D Scene (lazy-loaded, with fallback)
+
+```text
+Add an interactive 3D model powered by Spline. Install @splinetool/runtime and @splinetool/react-spline. Build a
+`SplineScene` component (mark the file 'use client') that lazy-loads the renderer so the heavy WebGL bundle never blocks
+first paint: const Spline = lazy(() => import('@splinetool/react-spline')). Wrap
+<Spline scene={[SCENE_URL]} className={className} /> in <Suspense> whose fallback is a w-full h-full flex items-center
+justify-center holding a [spinner <span class="loader"> | "[Loading…]" text | pulsing skeleton]. Props: `scene` (the
+prod.spline.design "[…/scene.splinecode]" URL) and an optional `className` for sizing. Render it at [w-full h-full] and
+let the parent set dimensions. [Optional: gate interaction until in view — pointer-events-none until an IntersectionObserver
+fires ?]. Keep the lazy() + Suspense pattern exactly — it is what stops the 3D payload from janking the initial load.
+```
+
+## 54 · Spotlight Beam Overlay (SVG)
+
+```text
+Add a `Spotlight` SVG that sweeps a soft cone of light across a dark section. Render an absolutely-positioned
+pointer-events-none <svg>, z-[1], opacity-0, h-[169%] w-[138%] lg:w-[84%], with an `animate-spotlight` class and viewBox
+"0 0 3787 2842". Inside a <g filter="url(#filter)"> place one <ellipse cx=1924.71 cy=273.501 rx=1924.71 ry=273.501>
+transformed by matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09), fill=[FILL = white], fill-opacity 0.21.
+Define <filter id="filter"> as a feGaussianBlur stdDeviation 151 over a ~3785×2840 userSpaceOnUse region. Accept a
+`className` prop for placement (e.g. "-top-40 left-0 md:left-60 md:-top-20") and a `fill` prop. Make it animate itself in
+— add the keyframe:
+@keyframes spotlight { 0% { opacity:0; transform:translate(-72%,-62%) scale(0.5) } 100% { opacity:1; transform:translate(-50%,-40%) scale(1) } }
+.animate-spotlight { animation: spotlight 2s ease 0.75s 1 forwards }
+Keep the ellipse geometry and the blur radius exactly — they are what make the beam read as light rather than a blob.
+Use it only on near-black surfaces.
+```
+
+## 55 · Interactive 3D Split Hero (copy · scene)
+
+```text
+Build an interactive 3D hero that pairs editorial copy with a live Spline model. Outer container: a `Card` (see “shadcn
+Card”) w-full h-[500px] bg-black/[0.96] relative overflow-hidden. Drop a <Spotlight> (see “Spotlight Beam Overlay”) at
+className "-top-40 left-0 md:left-60 md:-top-20" fill="white". Inside, a flex h-full two-up split:
+• LEFT (flex-1 p-8 relative z-10, flex flex-col justify-center): an h1 text-4xl md:text-5xl font-bold rendered as
+  gradient text (bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400) reading "[Interactive 3D]";
+  below it a paragraph mt-4 text-neutral-300 max-w-lg "[Bring your UI to life with beautiful 3D scenes…]"; [Optional CTA
+  row — see “Solid Pill Button” / “Glass CTA Button” ?].
+• RIGHT (flex-1 relative): <SplineScene scene="[SCENE_URL]" className="w-full h-full" /> (see “Spline 3D Scene”).
+[Optional: collapse to one column on mobile (flex-col) — scene on top, copy beneath ?]. The whole effect is the near-black
+card + the spotlight beam + the model's own lighting, so keep the background near-black and add no competing overlay.
+```
