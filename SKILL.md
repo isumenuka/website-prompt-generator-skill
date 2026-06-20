@@ -1,6 +1,6 @@
 ---
 name: website-prompt-generator
-description: Generate highly detailed, component-by-component prompts and blueprints for building websites based on user ideas. Automatically integrates the UI/UX design intelligence of the ui-ux-pro-max database (67 styles, 96 palettes, 57 typography pairings, and 99 UX guidelines). Trigger this skill whenever the user asks for a website prompt, landing page specifications, or a frontend build guide (React, Tailwind, Framer Motion, HTML, Next.js, Svelte, Vue, shadcn/ui, Anime.js, GSAP), or uploads reference images/UI mockups, or asks for complex animations using animejs / anime.js (timelines, stagger, scroll, drag and drop, SVG morphing) or GSAP ScrollTrigger (scroll-linked animations, pinning, scroll scrubbing, batching, scroller proxying).
+description: Generate highly detailed, component-by-component prompts and blueprints for building websites based on user ideas. Automatically integrates the UI/UX design intelligence of the ui-ux-pro-max database (67 styles, 96 palettes, 57 typography pairings, and 99 UX guidelines). Trigger this skill whenever the user asks for a website prompt, landing page specifications, or a frontend build guide (React, Tailwind, Framer Motion, HTML, Next.js, Svelte, Vue, shadcn/ui, Anime.js, GSAP, React Spring, React Three Fiber / R3F, Spline 3D, WebGL, Magic UI, React Bits, Scroll Reveal), or uploads reference images/UI mockups, or asks for complex animations, 3D elements, or lightweight 3D effects (timelines, stagger, scroll, drag and drop, SVG morphing, scroll-linked animations, pinning, scroll scrubbing, batching, scroller proxying, spring physics, canvas rendering).
 ---
 
 # Website Prompt Generator
@@ -81,9 +81,9 @@ In active conversations, present a brief summary of the design tokens (retrieved
 
 Act as an expert technical UI/UX designer and frontend architect. The resulting prompt must leave nothing to the imagination — specify the exact tech stack, colors, typography, layout, animations, and content structure. Incorporate all findings from **Step 0: UI/UX Design Intelligence Retrieval**.
 
-**CRITICAL STEP**: This skill comes bundled with a universal component-prompt library in `references/animated-web-prompts.md`. Before generating, use `grep_search` or `view_file` to find 1–3 entries that match the user's requested style or domain. **Analyze** them — study their structure, level of technical specificity, the bracket/placeholder convention, and the animation techniques — then generate a **completely new** prompt with your own components and animations. Do NOT copy a sample verbatim or hand the library text back as the output: the samples set the quality bar and demonstrate the format, they are not the deliverable. Do not skip this step!
-Additionally, if Anime.js is requested or is optimal for the animation requirements (like SVG morphing/drawing, complex stagger grids, or custom timelines), load `references/animejs-api-reference.md` and `references/animejs-examples.md` to ensure correct syntax, tree-shakeable imports, and clean React component structures (using `createScope` for component lifecycle cleanup).
-Likewise, if GSAP ScrollTrigger is requested or is optimal for advanced scroll-driven actions (like pinning, complex scroll timelines, scroll scrubbing, or callback batching), load `references/gsap-scrolltrigger-reference.md` to ensure correct plugin registration and proper cleanup using `@gsap/react` / `useGSAP()` hooks.
+**CRITICAL STEP**: This skill comes bundled with a universal component-prompt library in `references/core/animated-web-prompts.md`. Before generating, use `grep_search` or `view_file` to find 1–3 entries that match the user's requested style or domain. **Analyze** them — study their structure, level of technical specificity, the bracket/placeholder convention, and the animation techniques — then generate a **completely new** prompt with your own components and animations. Do NOT copy a sample verbatim or hand the library text back as the output: the samples set the quality bar and demonstrate the format, they are not the deliverable. Do not skip this step!
+Additionally, if Anime.js is requested or is optimal for the animation requirements (like SVG morphing/drawing, complex stagger grids, or custom timelines), load `references/animations/animejs/animejs-api-reference.md` and `references/animations/animejs/animejs-examples.md` to ensure correct syntax, tree-shakeable imports, and clean React component structures (using `createScope` for component lifecycle cleanup).
+Likewise, if GSAP ScrollTrigger is requested or is optimal for advanced scroll-driven actions (like pinning, complex scroll timelines, scroll scrubbing, or callback batching), load `references/animations/gsap/gsap-scrolltrigger-reference.md` to ensure correct plugin registration and proper cleanup using `@gsap/react` / `useGSAP()` hooks.
 
 ### Output Format (Text Mode)
 
@@ -104,7 +104,7 @@ Build a [type of site] with [key visual features].
 Tech Stack
 - React + Vite + TypeScript
 - Tailwind CSS
-- Framer Motion (for standard React transitions), Anime.js (v4) (for complex timeline/SVG/stagger animations), or GSAP + ScrollTrigger (for advanced scroll scrubbing, pinning, and batched viewport callbacks)
+- Framer Motion (for standard transitions), Anime.js (v4) (for complex timelines, staggers, and SVGs), GSAP + ScrollTrigger (for advanced scroll scrubbing, pinning, and batched viewport callbacks), React Spring (for physics-based spring transitions), or React Three Fiber / Spline (for interactive 3D WebGL scenes)
 - Lucide React
 
 Fonts
@@ -156,7 +156,7 @@ Responsive Breakpoints
 
 ### Step 1 — Load `ui-analysis-system.md` and Analyze Every Image/Video
 
-**Load `references/ui-analysis-system.md` now** — it gives you the per-image checklist, surface/material CSS recipes, typography reading guide, and motion inference patterns. Run the Quick Checklist from that file on every image before continuing.
+**Load `references/core/ui-analysis-system.md` now** — it gives you the per-image checklist, surface/material CSS recipes, typography reading guide, and motion inference patterns. Run the Quick Checklist from that file on every image before continuing.
 
 For each uploaded file, capture all of the following before designing anything:
 
@@ -186,7 +186,7 @@ If multiple images repeat the same pattern, group them — don't force ten secti
 
 ### Step 3 — Load `design-system-tokens.md` and Blend with UI/UX Pro Max Design System
 
-**Load `references/design-system-tokens.md` now** — match the palette template that most closely resembles the images, copy its CSS variables, and adjust hex values.
+**Load `references/core/design-system-tokens.md` now** — match the palette template that most closely resembles the images, copy its CSS variables, and adjust hex values.
 
 Then, blend these with the output of the **Step 0 UI/UX Pro Max** search results. Lock in the absolute design variables:
 - **Palette**: Inferred CSS variables with exact HSL/HEX values from both visual findings and the Pro Max recommended design system.
@@ -196,7 +196,7 @@ Then, blend these with the output of the **Step 0 UI/UX Pro Max** search results
 
 ### Step 4 — Load `section-patterns.md` then Write the Blueprint Prompt
 
-**Load `references/section-patterns.md` now** — find the matching pattern for each section identified from the images. Pull its build spec directly into the relevant section block below. This is what makes the output build-ready rather than descriptive.
+**Load `references/core/section-patterns.md` now** — find the matching pattern for each section identified from the images. Pull its build spec directly into the relevant section block below. This is what makes the output build-ready rather than descriptive.
 
 Wrap your entire output in a single ` ```markdown ` block. Use this structure:
 
@@ -213,9 +213,9 @@ One-line concept · who it's for · overall vibe and motion language.
 ## 2. Tech Stack
 - React + Vite + TypeScript
 - Tailwind CSS
-- Framer Motion, Anime.js (v4), or GSAP + ScrollTrigger
+- Framer Motion, Anime.js (v4), GSAP + ScrollTrigger, React Spring, or React Three Fiber / Spline
 - Lucide React
-- (Add Lenis, Three.js/R3F, Recharts, or specific library plugins only if the images or requirements imply them)
+- (Add Lenis, Recharts, or specific library plugins only if the images or requirements imply them)
 
 ## 3. Design System & UI/UX Rationale
 ### Global Design System Reference
@@ -313,31 +313,32 @@ Do NOT load all reference files at once. Load only what you need for the current
 
 | File | Load when | What it gives you |
 |---|---|---|
-| `references/animated-web-prompts.md` | Text Mode (always) + Image Mode (for technique matching) | 50+ universal component prompts — analyze them for structure, specificity, and animation technique, then design something new. Never output them verbatim. `grep_search` by keyword. |
-| `references/ui-analysis-system.md` | Image Blueprint Mode (always) | How to decode layouts, colors, type, surfaces, spacing, components, and motion from images. Includes the Quick Checklist. |
-| `references/design-system-tokens.md` | Any time you need exact CSS values | Color palette templates (6 presets), typography scales, Google Fonts pairings, spacing tokens, shadow recipes, motion tokens, full CSS variable blocks. |
-| `references/section-patterns.md` | When a matched section type is identified | 11 section categories with complete build specs: nav, hero, features, about, cards, testimonials, pricing, CTA, marquee, footer, animation wrappers. |
-| `references/animejs-api-reference.md` | When Anime.js is requested or chosen | Full API documentation for Anime.js v4, including timers, animations, timelines, stagger, scroll observers, draggable components, SVG morphing/drawing, and React integration rules. |
-| `references/animejs-examples.md` | When Anime.js is requested or chosen | Common Anime.js v4 animation recipes, timelines, scroll behaviors, SVG shape morphing, text splitting, UI toggle transitions, and React hooks. |
-| `references/gsap-scrolltrigger-reference.md` | When GSAP/ScrollTrigger is requested or chosen | Official reference manual for GSAP ScrollTrigger — covers scroll-linked animations, pinning, scrubbing, toggle actions, batching, scroller proxying, and React integration. |
-| `references/motion/core-concepts-deep-dive.md` | When advanced Framer Motion features are needed | Deep dive into variants orchestration, custom spring physics, layout animations, exit animations, and gestures. |
-| `references/motion/performance-optimization.md` | When optimizing bundle size or list performance | LazyMotion setup, useAnimate hooks, virtualization, and GPU acceleration. |
-| `references/motion/nextjs-integration.md` | When building Next.js applications | "use client" boundaries, SSR/hydration issues, and route transitions. |
-| `references/motion/accessibility-guide.md` | When implementing WCAG / reduced-motion | Handling prefers-reduced-motion, ARIA tags, and screen readers. |
-| `references/motion/common-patterns.md` | When copying common Framer Motion component code | Modal dialogues, accordions, carousels, tabs, and toast notifications. |
-| `references/motion/motion-vs-auto-animate.md` | When choosing between Framer Motion and AutoAnimate | Feature comparison and selection matrix. |
+| `references/core/animated-web-prompts.md` | Text Mode (always) + Image Mode (for technique matching) | 50+ universal component prompts — analyze them for structure, specificity, and animation technique, then design something new. Never output them verbatim. `grep_search` by keyword. |
+| `references/core/ui-analysis-system.md` | Image Blueprint Mode (always) | How to decode layouts, colors, type, surfaces, spacing, components, and motion from images. Includes the Quick Checklist. |
+| `references/core/design-system-tokens.md` | Any time you need exact CSS values | Color palette templates (6 presets), typography scales, Google Fonts pairings, spacing tokens, shadow recipes, motion tokens, full CSS variable blocks. |
+| `references/core/section-patterns.md` | When a matched section type is identified | 11 section categories with complete build specs: nav, hero, features, about, cards, testimonials, pricing, CTA, marquee, footer, animation wrappers. |
+| `references/animations/animejs/animejs-api-reference.md` | When Anime.js is requested or chosen | Full API documentation for Anime.js v4, including timers, animations, timelines, stagger, scroll observers, draggable components, SVG morphing/drawing, and React integration rules. |
+| `references/animations/animejs/animejs-examples.md` | When Anime.js is requested or chosen | Common Anime.js v4 animation recipes, timelines, scroll behaviors, SVG shape morphing, text splitting, UI toggle transitions, and React hooks. |
+| `references/animations/gsap/gsap-scrolltrigger-reference.md` | When GSAP/ScrollTrigger is requested or chosen | Official reference manual for GSAP ScrollTrigger — covers scroll-linked animations, pinning, scrubbing, toggle actions, batching, scroller proxying, and React integration. |
+| `references/animations/motion/core-concepts-deep-dive.md` | When advanced Framer Motion features are needed | Deep dive into variants orchestration, custom spring physics, layout animations, exit animations, and gestures. |
+| `references/animations/motion/performance-optimization.md` | When optimizing bundle size or list performance | LazyMotion setup, useAnimate hooks, virtualization, and GPU acceleration. |
+| `references/animations/motion/nextjs-integration.md` | When building Next.js applications | "use client" boundaries, SSR/hydration issues, and route transitions. |
+| `references/animations/motion/accessibility-guide.md` | When implementing WCAG / reduced-motion | Handling prefers-reduced-motion, ARIA tags, and screen readers. |
+| `references/animations/motion/common-patterns.md` | When copying common Framer Motion component code | Modal dialogues, accordions, carousels, tabs, and toast notifications. |
+| `references/animations/motion/motion-vs-auto-animate.md` | When choosing between Framer Motion and AutoAnimate | Feature comparison and selection matrix. |
+| `references/animations/[library-name]/` or `references/3d-webgl/[library-name]/` | When a specific 3D/animation library is requested | Check folders under `references/animations/` (such as `motion-framer`, `react-spring-physics`, `scroll-reveal-libraries`, `animated-component-libraries` (Magic UI, React Bits)) or `references/3d-webgl/` (such as `react-three-fiber`, `spline-interactive`, `threejs-webgl`, `substance-3d-texturing`, `web3d-integration-patterns`, `lightweight-3d-effects`) for their respective `SKILL.md` manuals and API guides. |
 
 ### Loading sequence for Image Blueprint Mode
 1. Run Step 0 (UI/UX Pro Max search command for design system and optional stack).
-2. Load `ui-analysis-system.md` → run the Quick Checklist on every image.
-3. Load `design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
-4. Load `section-patterns.md` → match each image to a section pattern.
-5. If using Anime.js, GSAP, or advanced Framer Motion, load their respective reference manuals/folders (`animejs-api-reference.md` / `animejs-examples.md`, `gsap-scrolltrigger-reference.md`, or `references/motion/`) to reference correct implementation APIs and code snippets.
-6. Grep `animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
+2. Load `core/ui-analysis-system.md` → run the Quick Checklist on every image.
+3. Load `core/design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
+4. Load `core/section-patterns.md` → match each image to a section pattern.
+5. If using any animation or 3D library (Anime.js, GSAP, Framer Motion, R3F, Spline, React Spring, WebGL, Magic UI, Scroll Reveal), load its respective reference files or folder under `references/animations/` or `references/3d-webgl/` to read correct implementation instructions.
+6. Grep `core/animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
 
 ### Loading sequence for Text Mode
 1. Run Step 0 (UI/UX Pro Max search command for design system and stack).
-2. If using Anime.js, GSAP, or advanced Framer Motion, load their respective reference files/folders.
-3. Grep `animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
-4. Load `design-system-tokens.md` if you need to define additional CSS variables or font details.
-5. Load `section-patterns.md` if a specific section type needs a detailed build spec.
+2. If using any animation or 3D library, load its respective reference manuals/folders under `references/animations/` or `references/3d-webgl/`.
+3. Grep `core/animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
+4. Load `core/design-system-tokens.md` if you need to define additional CSS variables or font details.
+5. Load `core/section-patterns.md` if a specific section type needs a detailed build spec.

@@ -700,7 +700,7 @@ export function UIComponentsDemo() {
  * 3. For large lists in carousels, use virtualization:
  *    pnpm add react-window
  *
- * See ../references/performance-optimization.md for full guide
+ * See ../../references/animations/motion/performance-optimization.md for full guide
  */
 
 /**

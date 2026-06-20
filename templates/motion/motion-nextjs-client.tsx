@@ -388,7 +388,7 @@ export function AnimatedProductCard({ product, index }: AnimatedProductCardProps
  *   )
  * }
  *
- * See ../references/performance-optimization.md for full guide
+ * See ../../references/animations/motion/performance-optimization.md for full guide
  */
 
 /**
@@ -486,5 +486,5 @@ const typedVariants: Variants = {
  * ❌ Don't use Motion in Server Components
  * ❌ Don't rely on AnimatePresence for route transitions (unreliable)
  *
- * See ../references/nextjs-integration.md for comprehensive guide
+ * See ../../references/animations/motion/nextjs-integration.md for comprehensive guide
  */

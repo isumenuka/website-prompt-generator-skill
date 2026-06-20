@@ -490,7 +490,7 @@ export function ScrollAnimationExamples() {
  *    - Tab through page
  *    - Ensure animations don't block keyboard focus
  *
- * See ../references/performance-optimization.md for full guide
+ * See ../../references/animations/motion/performance-optimization.md for full guide
  */
 
 /**
@@ -502,5 +502,5 @@ export function ScrollAnimationExamples() {
  *
  * import { motion, useScroll, ... } from "motion/react-client"
  *
- * See ../references/nextjs-integration.md for comprehensive guide
+ * See ../../references/animations/motion/nextjs-integration.md for comprehensive guide
  */
