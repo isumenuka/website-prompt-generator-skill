@@ -31,7 +31,7 @@ If images are present but you can't view them, ask the user to re-upload or past
 
 Act as an expert technical UI/UX designer and frontend architect. The resulting prompt must leave nothing to the imagination — specify the exact tech stack, colors, typography, layout, animations, and content structure.
 
-**CRITICAL STEP**: This skill comes bundled with detailed prompt examples in `references/Motion Sites Ideas prompts.md`. Before generating, use `grep_search` or `view_file` to find 1–3 examples that closely match the user's requested style or domain. Use them as a direct template for tone, structure, and level of detail. Do not skip this step!
+**CRITICAL STEP**: This skill comes bundled with a universal component-prompt library in `references/animated-web-prompts.md`. Before generating, use `grep_search` or `view_file` to find 1–3 entries that match the user's requested style or domain. **Analyze** them — study their structure, level of technical specificity, the bracket/placeholder convention, and the animation techniques — then generate a **completely new** prompt with your own components and animations. Do NOT copy a sample verbatim or hand the library text back as the output: the samples set the quality bar and demonstrate the format, they are not the deliverable. Do not skip this step!
 
 ### Output Format (Text Mode)
 
@@ -248,7 +248,7 @@ Do NOT load all reference files at once. Load only what you need for the current
 
 | File | Load when | What it gives you |
 |---|---|---|
-| `references/Motion Sites Ideas prompts.md` | Text Mode (always) + Image Mode (for tone matching) | 60+ real build prompts — use for tone, structure, and wording templates. `grep_search` by keyword. |
+| `references/animated-web-prompts.md` | Text Mode (always) + Image Mode (for technique matching) | 50+ universal component prompts — analyze them for structure, specificity, and animation technique, then design something new. Never output them verbatim. `grep_search` by keyword. |
 | `references/ui-analysis-system.md` | Image Blueprint Mode (always) | How to decode layouts, colors, type, surfaces, spacing, components, and motion from images. Includes the Quick Checklist. |
 | `references/design-system-tokens.md` | Any time you need exact CSS values | Color palette templates (6 presets), typography scales, Google Fonts pairings, spacing tokens, shadow recipes, motion tokens, full CSS variable blocks. |
 | `references/section-patterns.md` | When a matched section type is identified | 11 section categories with complete build specs: nav, hero, features, about, cards, testimonials, pricing, CTA, marquee, footer, animation wrappers. |
@@ -257,9 +257,9 @@ Do NOT load all reference files at once. Load only what you need for the current
 1. Load `ui-analysis-system.md` → run the Quick Checklist on every image
 2. Load `design-system-tokens.md` → match the palette template and lock CSS vars
 3. Load `section-patterns.md` → match each image to a section pattern
-4. Grep `Motion Sites Ideas prompts.md` for 1–2 prompts matching the vibe → steal their wording and specificity level
+4. Grep `animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording)
 
 ### Loading sequence for Text Mode
-1. Grep `Motion Sites Ideas prompts.md` for 1–3 matching examples → use as template
+1. Grep `animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new
 2. Load `design-system-tokens.md` if you need to define a color system or font pairing
 3. Load `section-patterns.md` if a specific section type needs a detailed spec
