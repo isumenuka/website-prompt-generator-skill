@@ -67,6 +67,7 @@ Your output prompt/blueprint must explicitly instruct the developer tool to adhe
 - **Layout & Spacing**: Floating navbars should have offset margins (such as `top-4 left-4 right-4`) to prevent them from feeling cramped against window edges. Avoid overlapping elements unless intentionally layered with explicit z-index values. Maintain a consistent container width (e.g., `max-w-6xl` or `max-w-7xl`).
 - **Accessibility**: Ensure keyboard focus rings are visible to help keyboard-only navigation. All form fields must have descriptive labels, all images must have alternative text, and transitions should respect the user's `prefers-reduced-motion` settings.
 - **No Sci-Fi / Cyberpunk HUD Wireframes**: Do not use decorative node/constellation graphs, dashed polygon wireframe connection lines, or futuristic HUD-style diagrams. These elements look unpolished and dated. Use clean typographic hierarchies, structured charts, real UI mockups, or premium gradient/shimmer surfaces instead.
+- **Device Responsiveness**: Every single layout, section, and component MUST be fully responsive and optimized to look exceptional on all screens (mobile, tablet, desktop). The layout must be built mobile-first, using relative/fluid units (like `clamp()`, `vw`, `%`, `dvh`) instead of fixed pixel widths, utilizing CSS Grid and Flexbox for adaptive scaling, and implementing container queries (`@container`) for component-level responsiveness. Ensure there is zero horizontal overflow, font sizes scale gracefully, and touch targets are a minimum of 44x44px on mobile devices.
 
 ### 5. Interactive Selection & Preview (Interactive Sessions Only)
 In active conversations, present a brief summary of the design tokens (retrieved primary/secondary/CTA colors, typography pairing, layout pattern, and a checklist) to the user for approval or adjustments **before** generating the final full build prompt/blueprint. This ensures user alignment.
@@ -139,6 +140,7 @@ Responsive Breakpoints
 3. **Aesthetic vocabulary**: "liquid glass", "noise overlay", "glassmorphism", "large editorial typography", "cinematic layouts", "tight tracking".
 4. **Placeholders**: If images/videos are needed, describe them precisely (e.g., "Full-screen muted autoplay video, `object-cover`, covering the entire viewport").
 5. **Exact Tailwind**: Use real classes — `text-[14vw]`, `md:-mt-5`, `tracking-tight`, `leading-none`.
+6. **Device Responsiveness**: Enforce mobile-first structures and responsive layouts. Explicitly define responsive reflows, layouts, column stacking, container queries, and clamp typography so that the website looks perfect on mobile, tablet, and desktop viewports.
 
 ---
 
@@ -282,6 +284,7 @@ One-line concept · who it's for · overall vibe and motion language.
 - **Cohesive**: disparate references resolve into one consistent system, not a patchwork.
 - **Build-ready**: a developer or AI coding tool can build the site top-to-bottom without guessing.
 - **Animation & 3D Tech Stack Requirement**: The generated blueprint/prompt MUST actively utilize ALL of the following animation and 3D technologies: Framer Motion / Motion, Anime.js (v4), GSAP + ScrollTrigger, Spline 3D / React Three Fiber / 3D WebGL, and React Spring. Furthermore, for each of these technologies, you must define AT LEAST 2 or more components, sections, or animation sequences utilizing that specific technology (with explicit configuration options and code blocks rather than generic placeholders).
+- **Device Responsiveness**: The output blueprint/prompt must be fully responsive. Detail the responsive behavior, grids, breakpoints, container queries, and clamp sizing for every section to ensure it displays beautifully on all mobile, tablet, and desktop viewports.
 
 ---
 
@@ -317,6 +320,10 @@ Do NOT load all reference files at once. Load only what you need for the current
 | `references/core/ui-analysis-system.md` | Image Blueprint Mode (always) | How to decode layouts, colors, type, surfaces, spacing, components, and motion from images. Includes the Quick Checklist. |
 | `references/core/design-system-tokens.md` | Any time you need exact CSS values | Color palette templates (6 presets), typography scales, Google Fonts pairings, spacing tokens, shadow recipes, motion tokens, full CSS variable blocks. |
 | `references/core/section-patterns.md` | When a matched section type is identified | 11 section categories with complete build specs: nav, hero, features, about, cards, testimonials, pricing, CTA, marquee, footer, animation wrappers. |
+| `references/responsive-design/breakpoint-strategies.md` | When designing general layout responsiveness, custom breakpoints, or CSS Grid layouts | Guidelines on mobile-first breakpoint systems, media query best practices, and standard/custom layouts. |
+| `references/responsive-design/container-queries.md` | When styling components that need component-level responsiveness regardless of viewport | Container query rules, units (cqw, cqh, cqi), container types, styling based on ancestor boundaries. |
+| `references/responsive-design/fluid-layouts.md` | When designing fluid typography, margins, paddings, and fluid CSS clamp scaling | Rules for fluid typographies, math for clamp functions, dynamic layout margins and spacing. |
+| `references/responsive-design/details.md` | When implementing specific code solutions for responsive navigation, responsive tables, or dynamic viewports | Complete code patterns for responsive tables, image art direction (picture tag), responsive headers/navigation. |
 | `references/animations/animejs/animejs-api-reference.md` | When Anime.js is requested or chosen | Full API documentation for Anime.js v4, including timers, animations, timelines, stagger, scroll observers, draggable components, SVG morphing/drawing, and React integration rules. |
 | `references/animations/animejs/animejs-examples.md` | When Anime.js is requested or chosen | Common Anime.js v4 animation recipes, timelines, scroll behaviors, SVG shape morphing, text splitting, UI toggle transitions, and React hooks. |
 | `references/animations/gsap/gsap-scrolltrigger-reference.md` | When GSAP/ScrollTrigger is requested or chosen | Official reference manual for GSAP ScrollTrigger — covers scroll-linked animations, pinning, scrubbing, toggle actions, batching, scroller proxying, and React integration. |
@@ -332,13 +339,15 @@ Do NOT load all reference files at once. Load only what you need for the current
 1. Run Step 0 (UI/UX Pro Max search command for design system and optional stack).
 2. Load `core/ui-analysis-system.md` → run the Quick Checklist on every image.
 3. Load `core/design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
-4. Load `core/section-patterns.md` → match each image to a section pattern.
-5. If using any animation or 3D library (Anime.js, GSAP, Framer Motion, R3F, Spline, React Spring, WebGL, Magic UI, Scroll Reveal), load its respective reference files or folder under `references/animations/` or `references/3d-webgl/` to read correct implementation instructions.
-6. Grep `core/animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
+4. Load appropriate reference files from `references/responsive-design/` (such as `breakpoint-strategies.md` or `container-queries.md`) to plan responsive structures.
+5. Load `core/section-patterns.md` → match each image to a section pattern.
+6. If using any animation or 3D library (Anime.js, GSAP, Framer Motion, R3F, Spline, React Spring, WebGL, Magic UI, Scroll Reveal), load its respective reference files or folder under `references/animations/` or `references/3d-webgl/` to read correct implementation instructions.
+7. Grep `core/animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
 
 ### Loading sequence for Text Mode
 1. Run Step 0 (UI/UX Pro Max search command for design system and stack).
 2. If using any animation or 3D library, load its respective reference manuals/folders under `references/animations/` or `references/3d-webgl/`.
 3. Grep `core/animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
 4. Load `core/design-system-tokens.md` if you need to define additional CSS variables or font details.
-5. Load `core/section-patterns.md` if a specific section type needs a detailed build spec.
+5. Load appropriate reference files from `references/responsive-design/` (such as `details.md` or `fluid-layouts.md`) to establish responsive behaviors and scales.
+6. Load `core/section-patterns.md` if a specific section type needs a detailed build spec.
