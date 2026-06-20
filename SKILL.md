@@ -66,6 +66,7 @@ Your output prompt/blueprint must explicitly instruct the developer tool to adhe
 - **Light/Dark Contrast**: Ensure a minimum contrast ratio of 4.5:1 for normal body text to guarantee readability. For glass elements in light mode, use a high-opacity layer (`bg-white/80` or higher) and a visible light gray border (`border-gray-200`) to prevent the card from washing out against a light background.
 - **Layout & Spacing**: Floating navbars should have offset margins (such as `top-4 left-4 right-4`) to prevent them from feeling cramped against window edges. Avoid overlapping elements unless intentionally layered with explicit z-index values. Maintain a consistent container width (e.g., `max-w-6xl` or `max-w-7xl`).
 - **Accessibility**: Ensure keyboard focus rings are visible to help keyboard-only navigation. All form fields must have descriptive labels, all images must have alternative text, and transitions should respect the user's `prefers-reduced-motion` settings.
+- **No Sci-Fi / Cyberpunk HUD Wireframes**: Do not use decorative node/constellation graphs, dashed polygon wireframe connection lines, or futuristic HUD-style diagrams. These elements look unpolished and dated. Use clean typographic hierarchies, structured charts, real UI mockups, or premium gradient/shimmer surfaces instead.
 
 ### 5. Interactive Selection & Preview (Interactive Sessions Only)
 In active conversations, present a brief summary of the design tokens (retrieved primary/secondary/CTA colors, typography pairing, layout pattern, and a checklist) to the user for approval or adjustments **before** generating the final full build prompt/blueprint. This ensures user alignment.
@@ -134,7 +135,7 @@ Responsive Breakpoints
 ### Text Mode Guidelines
 
 1. **Hyper-specific**: Not "Add a button" — say "A `rounded-full` pill, `bg-gradient-to-r from-[#18011F] to-[#B600A8]`, `text-white uppercase tracking-widest px-8 py-3`, with an inner `box-shadow: inset 0 1px 0 rgba(255,255,255,0.15)`."
-2. **All animations included**: Framer Motion variants, `useScroll`/`useTransform`, CSS keyframes — be explicit.
+2. **All animations included**: Framer Motion variants, `useScroll`/`useTransform`, CSS keyframes — be explicit. **CRITICAL REQUIREMENT**: The generated prompt must utilize GSAP (ScrollTrigger) or Anime.js (v4) for at least one or more components/sections (e.g., GSAP scroll pinning, Anime.js staggered grids, custom timeline sequences, or SVG shape morphing). Provide explicit configuration options and code blocks for these animations rather than generic placeholders.
 3. **Aesthetic vocabulary**: "liquid glass", "noise overlay", "glassmorphism", "large editorial typography", "cinematic layouts", "tight tracking".
 4. **Placeholders**: If images/videos are needed, describe them precisely (e.g., "Full-screen muted autoplay video, `object-cover`, covering the entire viewport").
 5. **Exact Tailwind**: Use real classes — `text-[14vw]`, `md:-mt-5`, `tracking-tight`, `leading-none`.
@@ -280,6 +281,7 @@ One-line concept · who it's for · overall vibe and motion language.
 - **Three animation triggers always covered**: Load/in-view · Scroll · Hover — for every section that uses an image.
 - **Cohesive**: disparate references resolve into one consistent system, not a patchwork.
 - **Build-ready**: a developer or AI coding tool can build the site top-to-bottom without guessing.
+- **GSAP / Anime.js Integration**: The generated blueprint/prompt must actively utilize GSAP (ScrollTrigger) or Anime.js (v4) for at least one or more components or sections. Define clear animation configs, timelines, or hooks for these components.
 
 ---
 

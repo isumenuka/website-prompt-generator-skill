@@ -778,6 +778,7 @@ def format_master_md(design_system: dict) -> str:
     lines.append("- ❌ **Low contrast text** — Maintain 4.5:1 minimum contrast ratio")
     lines.append("- ❌ **Instant state changes** — Always use transitions (150-300ms)")
     lines.append("- ❌ **Invisible focus states** — Focus states must be visible for a11y")
+    lines.append("- ❌ **Sci-fi wireframe diagrams / HUD elements** — Avoid decorative dashed polygons, node/constellation graphs, or fake technical line diagrams. Focus on clean typography, real UI elements, and modern layout structures instead.")
     lines.append("")
     
     # Pre-Delivery Checklist
