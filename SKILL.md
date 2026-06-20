@@ -104,7 +104,7 @@ Build a [type of site] with [key visual features].
 Tech Stack
 - React + Vite + TypeScript
 - Tailwind CSS
-- Framer Motion (for standard transitions), Anime.js (v4) (for complex timelines, staggers, and SVGs), GSAP + ScrollTrigger (for advanced scroll scrubbing, pinning, and batched viewport callbacks), React Spring (for physics-based spring transitions), or React Three Fiber / Spline (for interactive 3D WebGL scenes)
+- Framer Motion / Motion, Anime.js (v4), GSAP + ScrollTrigger, Spline 3D / React Three Fiber / 3D WebGL, and React Spring. Note: The generated prompt must include all of these animation and 3D technologies, with at least 2 or more components, sections, or animation sequences for each technology.
 - Lucide React
 
 Fonts
@@ -135,7 +135,7 @@ Responsive Breakpoints
 ### Text Mode Guidelines
 
 1. **Hyper-specific**: Not "Add a button" — say "A `rounded-full` pill, `bg-gradient-to-r from-[#18011F] to-[#B600A8]`, `text-white uppercase tracking-widest px-8 py-3`, with an inner `box-shadow: inset 0 1px 0 rgba(255,255,255,0.15)`."
-2. **All animations included**: Framer Motion variants, `useScroll`/`useTransform`, CSS keyframes — be explicit. **CRITICAL REQUIREMENT**: The generated prompt must utilize GSAP (ScrollTrigger) or Anime.js (v4) for at least one or more components/sections (e.g., GSAP scroll pinning, Anime.js staggered grids, custom timeline sequences, or SVG shape morphing). Provide explicit configuration options and code blocks for these animations rather than generic placeholders.
+2. **All animations included**: Framer Motion variants, `useScroll`/`useTransform`, CSS keyframes — be explicit. **CRITICAL REQUIREMENT**: The generated prompt MUST utilize ALL of the following animation and 3D technologies: Framer Motion / Motion, Anime.js (v4), GSAP + ScrollTrigger, Spline 3D / React Three Fiber / 3D WebGL, and React Spring. Furthermore, for each of these technologies, you must define AT LEAST 2 or more components, sections, or animation sequences utilizing that specific technology (with explicit configuration options and code blocks rather than generic placeholders).
 3. **Aesthetic vocabulary**: "liquid glass", "noise overlay", "glassmorphism", "large editorial typography", "cinematic layouts", "tight tracking".
 4. **Placeholders**: If images/videos are needed, describe them precisely (e.g., "Full-screen muted autoplay video, `object-cover`, covering the entire viewport").
 5. **Exact Tailwind**: Use real classes — `text-[14vw]`, `md:-mt-5`, `tracking-tight`, `leading-none`.
@@ -213,7 +213,7 @@ One-line concept · who it's for · overall vibe and motion language.
 ## 2. Tech Stack
 - React + Vite + TypeScript
 - Tailwind CSS
-- Framer Motion, Anime.js (v4), GSAP + ScrollTrigger, React Spring, or React Three Fiber / Spline
+- Framer Motion / Motion, Anime.js (v4), GSAP + ScrollTrigger, Spline 3D / React Three Fiber / 3D WebGL, and React Spring. Note: The generated prompt must include all of these animation and 3D technologies, with at least 2 or more components, sections, or animation sequences for each technology.
 - Lucide React
 - (Add Lenis, Recharts, or specific library plugins only if the images or requirements imply them)
 
@@ -281,7 +281,7 @@ One-line concept · who it's for · overall vibe and motion language.
 - **Three animation triggers always covered**: Load/in-view · Scroll · Hover — for every section that uses an image.
 - **Cohesive**: disparate references resolve into one consistent system, not a patchwork.
 - **Build-ready**: a developer or AI coding tool can build the site top-to-bottom without guessing.
-- **GSAP / Anime.js Integration**: The generated blueprint/prompt must actively utilize GSAP (ScrollTrigger) or Anime.js (v4) for at least one or more components or sections. Define clear animation configs, timelines, or hooks for these components.
+- **Animation & 3D Tech Stack Requirement**: The generated blueprint/prompt MUST actively utilize ALL of the following animation and 3D technologies: Framer Motion / Motion, Anime.js (v4), GSAP + ScrollTrigger, Spline 3D / React Three Fiber / 3D WebGL, and React Spring. Furthermore, for each of these technologies, you must define AT LEAST 2 or more components, sections, or animation sequences utilizing that specific technology (with explicit configuration options and code blocks rather than generic placeholders).
 
 ---
 
