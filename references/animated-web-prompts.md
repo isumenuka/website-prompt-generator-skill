@@ -662,3 +662,269 @@ className "-top-40 left-0 md:left-60 md:-top-20" fill="white". Inside, a flex h-
 [Optional: collapse to one column on mobile (flex-col) — scene on top, copy beneath ?]. The whole effect is the near-black
 card + the spotlight beam + the model's own lighting, so keep the background near-black and add no competing overlay.
 ```
+
+---
+### LOADERS & PROGRESS
+---
+
+## 56 · Shimmer / Pulse Skeleton (theme-switched)
+
+```text
+Build a `Skeleton` placeholder primitive whose loading animation switches by theme — a horizontal SHIMMER sweep in light
+mode, a soft PULSE in dark mode — driven by one CSS variable so no JS branching is needed. In :root set
+--skeleton-animation: shimmer; in .dark override to --skeleton-animation: pulse. Define both keyframes exactly:
+@keyframes skeleton-shimmer { 100% { transform: translateX(200%) } } and
+@keyframes skeleton-pulse { 50% { opacity: 0.55 } }. Base block: rounded-lg bg-[#e9e9ec] dark:bg-white/10 relative
+overflow-hidden. LIGHT — an ::after layer (absolute inset-0, background
+linear-gradient(90deg, transparent, rgba(255,255,255,0.65), transparent), starting translateX(-100%)) runs
+skeleton-shimmer [1.4s] ease-in-out infinite. DARK — the ::after is hidden and the block itself runs skeleton-pulse
+[1.8s] ease-in-out infinite. Compose a demo card: a `.shadow-panel w-[250px] space-y-5 rounded-lg bg-transparent p-4`
+wrapper holding one h-32 rounded-lg block over three text-line bars (h-3 rounded-lg, widths [w-3/5], [w-4/5], [w-2/5]).
+Keep the two keyframes and the var-swap exactly — that single variable is what makes one component serve both themes.
+```
+
+## 57 · Progressive Flux Loader (3D phase labels + sheen)
+
+```text
+Build a `ProgressiveFluxLoader` — a glossy progress bar with a 3D "fly-in" phase label above it. Works controlled (pass
+`value` 0–100) or uncontrolled (self-runs a sweep over [duration = 12]s, then loops after a 700ms pause). Drive the label
+from a phases array of { at, label } where the label switches once each threshold is crossed; default phases
+[{0,"starting up"},{25,"loading assets"},{55,"preparing magic"},{80,"almost there"},{100,"all done"}]. Dependency:
+framer-motion.
+
+TRACK: relative h-5 w-full overflow-hidden rounded-full bg-muted with inset shadow
+[inset_0_2px_3px_rgba(0,0,0,0.09),inset_0_-1px_2px_rgba(255,255,255,0.7)] (darker inset variant in dark mode). Give it
+role="progressbar", aria-valuenow, and aria-valuetext "`{pct}% – {label}`".
+
+FILL: a motion.div whose width animates to `{pct}%` with transition { duration: 0.55, ease: [0.22, 1, 0.36, 1] }.
+Background is the signature flux gradient, read from two CSS vars so it can be recolored per instance — --flux-from
+(default #1d6ffb), --flux-to (default #74e1ff), mid = color-mix(in oklab, var(--flux-from), var(--flux-to)):
+linear-gradient(90deg, from 0%, mid 35%, to 55%, mid 78%, from 100%). Box-shadow stacks a colored glow from the same
+palette, a white top-edge highlight, and a deep-blue inset:
+0 0 18px color-mix(from 55%,transparent), 0 0 32px color-mix(to 40%,transparent),
+inset 0 1.5px 0 rgba(255,255,255,0.5), inset 0 -2px 3px rgba(0,40,120,0.35).
+
+SHEEN: inside the fill, an absolute inset-y w-1/2 rounded-full span, background
+linear-gradient(90deg, transparent, rgba(255,255,255,0.55) 50%, transparent), mixBlendMode:'screen', animating
+x ['-110%','210%'], duration 1.6s linear infinite.
+
+3D LABEL: a [h-16] container with perspective:1000px. On each label change use AnimatePresence mode="wait" on a
+motion.div (transformStyle:'preserve-3d'), initial { opacity:0, z:-380, scale:0.65, filter:'blur(14px)' }, animate the
+keyframes z:[-380,60,-8,0] / scale:[0.65,1.08,0.985,1] / filter blur 14→0, exit { opacity:0, z:220, scale:1.35,
+blur(10px) }, transition { duration:0.9, ease:[0.22,1,0.36,1] }. Inside, split the label into chars; each char rises from
+{ opacity:0, y:12, blur(8px) } to { opacity:1, y:0, blur(0) } with delay 0.18 + i*0.035, duration 0.45. Mark the label
+aria-hidden (the progressbar carries the value). Under prefers-reduced-motion render the label as static text and animate
+width instantly. Container: mx-auto w-full max-w-md flex flex-col items-center gap-8. Keep the z-fly-in keyframes, the
+sheen sweep, and the gradient/shadow recipes exactly — they are the engine.
+```
+
+---
+### PAGINATION & CONTROLS
+---
+
+## 58 · Pagination (prev · numbered · next)
+
+```text
+Build a `Pagination` control: hold `page` in state (1-based) against [totalPages = 3], laid out as a centered row
+(flex justify-center items-center gap-1). Three parts:
+• PREVIOUS — a pill (h-9 px-3 rounded-full inline-flex items-center gap-1.5 text-sm) holding a lucide ChevronLeft +
+  "[Previous]"; disabled when page === 1 (opacity-40 pointer-events-none); onClick page → page−1.
+• NUMBERED links — map 1…totalPages to square buttons (w-9 h-9 rounded-full grid place-items-center text-sm). The active
+  page (p === page) is bg-[ACCENT = #7342E2] text-white; the rest text-[muted] hover:bg-black/5 dark:hover:bg-white/10;
+  onClick sets page = p.
+• NEXT — mirror of Previous: "[Next]" + a lucide ChevronRight; disabled when page === totalPages; onClick page → page+1.
+Every button gets focus-visible:ring-2 ring-[ACCENT] and transition-colors. In a React artifact wire it with onClick — do
+NOT use a <form>. [Optional: render the buttons as .liquid-glass pills (see "Liquid Glass") for an over-video placement ?].
+```
+
+---
+### TEXT ANIMATION PRIMITIVES — Hover Reveal
+---
+
+## 59 · `CascadeText` — Per-Char Roll-Up on Hover
+
+```text
+Build a `CascadeText` component (props: text, [staggerDelay = 25]ms, [duration = 250]ms, [direction = up | down], color,
+[hoverColor = #b2c73a], [fontSize = 3rem]) that rolls each character vertically on hover to reveal an identical copy
+sliding in from below — a split-flap / odometer feel achieved with a text-shadow clone, no duplicated DOM. Mechanism,
+keep exact:
+• Split `text` into grapheme clusters with Intl.Segmenter("en",{granularity:"grapheme"}) (fallback [...text]) so emoji
+  and accents stay intact.
+• Outer wrapper: inline-block relative overflow-hidden font-extrabold uppercase tracking-tight cursor-pointer select-none,
+  padding 0.15em 0.4em, line-height 1, color transition 0.35s ease (color → hoverColor on hover).
+• Inner span: inline-flex overflow-hidden, height:1em.
+• Each character span: inline-block will-change-transform, textShadow `0 {sign}em currentColor` (sign = +1 for direction
+  up, −1 for down — the shadow IS the second copy), transition `transform {duration}ms {easing = ease-in-out}`,
+  transitionDelay `{i * staggerDelay}ms`. On hover translateY({-sign}em); render a space as \u00A0.
+Default tag is <a> (href "#", target/rel handled) but allow an `as` prop to swap it. Memoize the component. Usage:
+<CascadeText text="[Hover me]" hoverColor="[#b2c73a]" />. Use it for nav links, oversized menu items, or footer links.
+```
+
+---
+### CAROUSELS & INTERACTIVE GALLERIES
+---
+
+## 60 · Card Fan Carousel (GSAP fan + hover spread)
+
+```text
+Build a `CardFanCarousel` (GSAP) — a horizontal fan of portrait cards that deals in on load, spreads on hover, and
+paginates with infinite wrap when there are more cards than fit. Dependency: gsap. Cap visible cards at 7 (HALF = 3).
+Lock the fan geometry to these 7 slots (rot°, scale, x-rem, y-rem, zIndex), keep exact —
+[-21,0.7756,-30,7.3,1] [-14,0.8498,-22,4.0,2] [-7,0.9346,-11,1.3,3] [0,1.0,0,0,10] [7,0.9346,11,1.3,3]
+[14,0.8498,22,4.0,2] [21,0.7756,30,7.3,1]. With fewer than 7 cards, interpolate each slot from its signed distance d to
+center: rot = d*21, scale = 1 − 0.2244*d², x = d*30, y = d²*7.3, zIndex = 10 − |offsetFromCenter|.
+
+RESPONSIVE: multiply all x-offsets and entry distances by a width multiplier [<480:0.28, <640:0.38, <768:0.5,
+<1024:0.75, else 1.0], and multiply all y-offsets by a height multiplier = min(1, (innerHeight*0.7) / idealHeightPx) so
+the fan never overflows a short viewport.
+
+LOAD: each card deals in from { x:0, y:12rem, rotation:0, scale:0.5, opacity:0 } to its slot with
+ease "elastic.out(1.05,.78)", duration 1.2, delay 0.2 + slot*0.06.
+
+HOVER: hovering a card lifts it (y −= 2.5rem, scale *= 1.08) and shoves its neighbors outward — pushStrength =
+8 * (1 − |normalized|) * (1 + 0.2*max(0, 3 − distance)); left neighbors x −= push & rot −= 3/(dist+1), right neighbors
+the mirror — all with ease "elastic.out(1,.75)", duration 0.5, stagger distance*0.02. Restore on container mouseleave
+(50ms debounce).
+
+PAGINATION (only when cards > 7): prev/next circular buttons [w-10 h-10 md:w-12 md:h-12 rounded-full border
+border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 backdrop-blur-[16px]] with a chevron SVG, plus a dot row
+(active dot bg-black/70 dark:bg-white/80 scale-[1.3]). Cycling steps the center index with modulo wrap; entering cards fly
+in from ±40rem / rotation ±30 / scale 0.5, exiting cards leave to ∓40rem / rotation ∓30 / opacity 0.
+
+Each card: rounded portrait image, object-cover, lazy-loaded, optional linkUrl (target _blank for http). Pass a `cards`
+array of { imgUrl, alt?, linkUrl? } — provide [7–10] entries. Keep the slot table and the two elastic eases exactly; they
+are what make the fan feel physical.
+```
+
+## 61 · Scroll-Reel Testimonials (counter-rotating reel + char rise)
+
+```text
+Build a `ScrollReelTestimonials` — a quote panel beside a 3-column portrait "reel": the middle column is a real vertical
+list of portraits, the two outer columns are blurred placeholder cells, and on each step the middle slides one pitch while
+the outer columns counter-slide the opposite way. Lock the geometry: CELL = 121.33px, GAP = 8px, STEP = 3*(CELL+GAP) =
+388px. Per step, middleY = (centerIndex − index) * STEP and sideY = −middleY; transition both with
+`transform 800ms cubic-bezier(0.65,0,0.35,1)`, enabled only after first paint (so it starts at its offset, no slide-in).
+
+REEL: a [w-[380px]] overflow-hidden box with a double mask that fades all four edges —
+maskImage: linear-gradient(to right, transparent, black 14%, black 86%, transparent),
+linear-gradient(to bottom, transparent, black 10%, black 90%, transparent) with maskComposite:intersect. Placeholder
+Cell: 121.33² rounded-xl border bg-gradient-to-b from-secondary to-card blur-[1px]. Featured tile: 121.33² rounded-xl
+overflow-hidden, image object-cover object-[center_30%], plus two overlays — a white mix-blend-saturation layer
+(desaturate) and a diagonal sheen
+linear-gradient(220.99deg, rgba(108,92,255,0) 32%, #6c5cff 41%, #adb1ff 47%, rgba(130,189,237,0.57) 54%, transparent 65%)
+blur-[6px] mix-blend-overlay. Build the middle list as: 3 lead cells, then [featured + 2 cells] per testimonial, then 3
+trailing cells.
+
+TEXT — per-character rise: on each change, the OLD block first runs @keyframes scroll-reel-exit { from {opacity:1;
+transform:translateY(0)} to {opacity:0; transform:translateY(-12px)} } over 240ms; THEN the new block mounts and each
+character rises via @keyframes scroll-reel-char-rise { to { opacity:1; transform:translateY(0) } } with inline
+animation-delay = charIndex * [charStaggerMs = 6]ms (split words into nowrap spans so wrapping is preserved). Keep an
+invisible in-flow copy of the current quote+author to size the stage so wrapped text never clips. Mark it aria-live polite.
+
+CONTROLS: a large decorative quote glyph, then prev/next circular buttons (h-6 w-6 rounded-full border
+border-foreground/15, hover scale 1.08, disabled opacity-40) gated at the first/last index; also support ArrowLeft /
+ArrowRight keys. Lock interactions during the 800ms slide. Pass a `testimonials` array of { quote, author, image, alt? } —
+provide [3]. Container: max-w-[1060px] rounded-xl border bg-muted, flex-col on mobile → md:flex-row. Keep STEP, the two
+keyframes, and the counter-rotation (sideY = −middleY) exactly.
+```
+
+---
+### INTERACTIVE CANVAS EFFECTS
+---
+
+## 62 · Ink Reveal (canvas brush-erase overlay)
+
+```text
+Build an `InkReveal` canvas overlay — an absolutely-positioned <canvas> (inset-0, z-1, cursor:none) that starts fully
+painted in [maskColor = rgb(252,250,248)], hiding whatever sits beneath it; as the cursor moves, organic ink "stamps"
+ERASE the paint (canvas destination-out) to reveal the layer below, and each stamp blooms then fades. Pure canvas, no
+deps. Engine, keep exact:
+• Each frame: refill the whole canvas with maskColor (globalCompositeOperation 'source-over'), then switch to
+  'destination-out' and redraw every live stamp — so erased areas show through and re-heal as stamps die.
+• A stamp is a wobble blob, not a clean circle: trace [segments = 36] points where radius *= 0.78 + 0.14*sin(3a+seed) +
+  0.08*sin(5a+2.1·seed) + 0.05*sin(7a+0.7·seed), filled with a radial gradient (rgba(0,0,0,0.95·α) center → 0.88·α at 0.5
+  → 0 at edge), inner-radius factor 0.2.
+• Growth: radius eases rStart [10]px → rmax with 1−(1−t)³; alpha = 1−t²; lifetime [600]ms; rmax = [brushSize = 128] *
+  (1 − [rVary = 0.45] + random·rVary).
+• stampAlong: between the last and current pointer position, drop a stamp every [stampStep = 10]px (ceil(dist/step)
+  steps) so fast strokes stay continuous. Cap live stamps at [maxStamps = 200] (shift the oldest).
+• Sizing: devicePixelRatio capped at 2; re-fill maskColor on resize.
+Drive it from onMouseEnter / onMouseMove (compute pos relative to the canvas rect) and start a requestAnimationFrame loop
+that stops itself once no stamps remain. Place it over any image/section to make it "wipe on" under the cursor. Keep the
+wobble formula, the destination-out refill, and the ease/alpha curves exactly — they are what make it read as ink, not an
+eraser.
+```
+
+## 63 · Pixel Canvas Background (animated pixel ripple)
+
+```text
+Build a `PixelCanvas` animated background — a <canvas> (absolute inset-0, block w-full h-full) that fills its box with a
+grid of tiny squares spaced every [gap = 6]px; each square grows in then shimmers, and the grid blooms OUTWARD from the
+center like a ripple. Pure canvas, no deps. Engine, keep exact:
+• Build one pixel per grid cell. Per pixel: speed = rand(0.08,0.4) * baseSpeed, sizeStep = rand(0.12,0.28), maxSize =
+  rand(0.5,2), and a `delay` = distance from canvas center (√(dx²+dy²)) * 0.65 — the delay is what staggers the ripple
+  from the middle out. baseSpeed (effectiveSpeed) = min([speed = 30],100) * 0.001.
+• appear(): while a per-pixel counter ≤ delay, increment it and draw nothing; after the delay, grow size by sizeStep
+  until it reaches maxSize, then flip to shimmer().
+• shimmer(): bounce size between minSize 0.5 and maxSize at ±speed (reverse at the ends) so the field gently twinkles
+  forever.
+• disappear(): shrink size by 0.1 until 0, then mark the pixel idle (used to fade the field out).
+• Each pixel picks a random color from a `colors` array; draw with fillRect at the cell origin plus a small centering
+  offset.
+Throttle the loop to ~60fps (skip frames under 1000/60ms), re-init on a ResizeObserver, and under prefers-reduced-motion
+set all delays to 0. Pass `colors` (e.g. derive 4 muted tones + 1 accent from your theme tokens), `gap`, `speed`. Layer a
+radial mask over it — radial-gradient(circle at center, transparent 0%, var(--bg) 100%) at ~0.8 opacity — so the field
+fades into the page edges. Keep the center-distance delay and the grow→shimmer state machine exactly; they are the ripple.
+```
+
+---
+### HERO BLOCKS — Continued
+---
+
+## 64 · Pixel-Perfect Hero (pixel canvas · glass text · logo marquee)
+
+```text
+Build a `PixelHero` — a full-height hero (relative w-full min-h-[100dvh] bg-background overflow-hidden) layered over the
+animated `PixelCanvas` (see "Pixel Canvas Background"), feeding it colors derived from theme tokens
+[muted, muted, muted, muted, [ACCENT/primary]] and gap 6. Stack, back to front:
+• BACKGROUND: <PixelCanvas /> at z-0 pointer-events-none, with a radial mask
+  radial-gradient(circle at center, transparent 0%, var(--background) 100%) at opacity-80 so it fades into the edges.
+• HEADLINE: an h1 of two words on a "[liquid/tahoe] glass text" treatment — word1 "[Silent]" in font-serif italic, word2
+  "[Precision.]" in font-sans font-extrabold tracking-tighter, sizes text-[2.8rem] → md:text-8xl lg:text-9xl leading-none.
+  The glass fill, keep exact: color transparent; background linear-gradient(135deg, rgba(255,255,255,1) 0%, .4 25%, .1 45%,
+  .9 55%, .2 75%, 1 100%); background-size 200% auto; -webkit-background-clip text; -webkit-text-stroke 1.5px
+  rgba(255,255,255,0.3); filter drop-shadow(0 15px 35px rgba(0,0,0,0.4)) drop-shadow(0 5px 10px rgba(0,0,0,0.2)); plus
+  @keyframes shimmer { 0%{background-position:200% center} 100%{background-position:0% center} } running 8s linear infinite.
+• SUBHEAD: a font-light text-foreground/85 paragraph "[Minimalist interfaces driven by refined motion…]", max-w-xl.
+• LOGO MARQUEE: an eyebrow "[Trusted by industry leaders]" over a row of [4–6] brand logos (inline SVGs, opacity-60
+  hover:opacity-100), duplicated back-to-back and animated with @keyframes marquee { 0%{translateX(0)}
+  100%{translateX(-50%)} } 25s linear infinite, inside a
+  [mask-image:linear-gradient(to_right,transparent,white_15%,white_85%,transparent)] track. Show it in the center block on
+  mobile and absolutely pinned bottom-8 on desktop.
+• CTAs: a primary pill "[Explore Design]" — bg-gradient-to-b from-primary/90 to-primary text-primary-foreground rounded-xl
+  with an inset highlight + lucide ArrowRight; and a secondary "[View GitHub]" — bg-gradient-to-b from-card/80 to-card
+  ring-1 ring-border backdrop-blur-md with a lucide Github icon. Both hover:scale-[1.02] active:scale-[0.98].
+Reveal the CTA row + desktop marquee with an isLoaded fade-up (opacity-0 translate-y-8 → opacity-100 translate-y-0,
+duration-1000, staggered transitionDelay 450ms / 600ms). Props: word1, word2, description, primaryCta, secondaryCta,
+githubUrl. Dependency: lucide-react. Keep the glass-text recipe and the marquee keyframe exactly.
+```
+
+---
+### MARQUEE — Continued
+---
+
+## 65 · Infinite Ribbon (rotating marquee banner)
+
+```text
+Build an `InfiniteRibbon` — a full-width marquee banner that scrolls a phrase sideways forever and can be tilted. Props:
+[repeat = 5], [duration = 10]s, [reverse = false], [rotation = 0]°, children. Outer bar: w-full overflow-hidden
+bg-[#facc15] py-1 text-black text-lg (dark:bg-yellow-500), rotated via transform rotate({rotation}deg). Track: a flex
+w-max whitespace-nowrap row containing the child repeated repeat*2 times (each mr-8 inline-block select-none), animated
+linear infinite over {duration}s with — keep exact —
+@keyframes iconiq-infinite-ribbon { from { transform: translateX(0) } to { transform: translateX(-50%) } } (and a
+…-reverse variant from -50% → 0). The duplicate-and-translate-(-50%) pair is what makes the loop seamless; switching
+`reverse` swaps the keyframe. Add an sr-only copy of the children for screen readers and mark the visible track
+aria-hidden. Under prefers-reduced-motion force animation-duration 1ms / iteration 1. Stack two of them at rotation +5 and
+−5 with `reverse` flipped for a crossing-ribbons hero accent. Use it as a section divider, a hero accent, or a
+"now shipping" banner.
+```
