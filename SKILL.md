@@ -27,7 +27,7 @@ If images are present but you can't view them, ask the user to re-upload or past
 
 In active conversations (interactive sessions), before executing the UI/UX script or generating the build prompt/blueprint, you MUST present a short, user-friendly multiple-choice questionnaire to clarify the project requirements. This helps in tailoring the design system and tech stack to their exact needs.
 
-Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3C, 4A, 5B, 6A, 7B, 8F, 9C"):
+Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3C, 4A, 5F, 6C"):
 
 1. **What type of website are you building?**
    - **Option A:** Portfolio / Personal Website (showcasing projects, resume, skills, and contact)
@@ -37,49 +37,28 @@ Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3
    - **Option E:** Creative / Immersive Showcase (highly visual, 3D elements, interactive animations, or 3D displays)
    - **Option F:** Other (Please specify)
 
-2. **What visual style or vibe do you prefer?**
-   - **Option A:** Minimalist & Clean (ample whitespace, subtle borders, high legibility, clean spacing)
-   - **Option B:** Glassmorphism & Neon Glow (frosted glass cards, glowing borders, dark/vibrant contrasts)
-   - **Option C:** Neo-Brutalism (thick dark borders, flat bright colors, retro typography, hard shadows)
-   - **Option D:** Luxury & Editorial (elegant serif headings, muted pastel/monochrome tones, spacious layout)
-   - **Option E:** Dark Mode Tech (deep slate/zinc backgrounds, tech-focused cards, neon teal/purple accents)
-   - **Option F:** No preference / Let the AI decide based on industry
-
-3. **Do you have a preferred color palette?**
-   - **Option A:** Cool Slate & Indigo (sleek, modern tech look)
-   - **Option B:** Deep Trust Blue & Emerald (fintech, professional, clean look)
-   - **Option C:** Vibrant Magenta & Violet (creative, energetic, bold look)
-   - **Option D:** Forest Green & Warm Sand (earthy, natural, organic, cozy look)
-   - **Option E:** High-Contrast Monochromatic (pure black, white, gray, stark contrast look)
-   - **Option F:** Custom (Please specify your preferred colors or hex codes)
-
-4. **What is your target tech stack?**
+2. **What is your target tech stack?**
    - **Option A:** HTML + CSS (Vanilla with Tailwind CSS, lightweight single-page)
    - **Option B:** React + Vite + Tailwind CSS + Framer Motion (Modern dynamic SPA)
    - **Option C:** Next.js (App Router) + Tailwind CSS + shadcn/ui (Full-stack ready template)
    - **Option D:** SvelteKit or Vue / Nuxt + Tailwind CSS
    - **Option E:** Other (Please specify, e.g., Astro, mobile framework)
 
-5. **What level of animation and interactivity do you want?**
-   - **Option A:** Subtle / Minimal (simple fade-ins, hover states, transition-colors)
-   - **Option B:** Engaging & Interactive (scroll-reveal, card staggers, smooth scroll, hover lift/tilt)
-   - **Option C:** Immersive / Advanced (GSAP ScrollTrigger pinning/scrubbing, Anime.js morphs, Spline/R3F 3D effects)
-
-6. **What is the primary layout and structure preference?**
+3. **What is the primary layout and structure preference?**
    - **Option A:** Single-page scrollable landing page (best for quick conversions/simple products)
    - **Option B:** Multi-page site (Home, About, Services, Contact, Blog, etc.)
    - **Option C:** Dashboard / Web Application Interface (interactive charts, tables, sidebar navigation, profiles)
    - **Option D:** Documentation / Resource Center (search bar, nested sidebar menu, article grid, docs layout)
    - **Option E:** Minimalist "Under Construction" / Link-in-bio (single-screen hero with quick CTA/links)
 
-7. **What typography style fits the brand best?**
+4. **What typography style fits the brand best?**
    - **Option A:** Modern Sans-Serif (Inter, Roboto, Outfit - clean, neutral, standard tech/SaaS)
    - **Option B:** Elegant Serif (Instrument Serif, Playfair Display - editorial, luxury, fashion, boutique)
    - **Option C:** Technical Mono (JetBrains Mono, Fira Code - developer tools, Web3, database portals)
    - **Option D:** Geometric & Friendly (Lexend, Montserrat, Poppins - marketing, SaaS, startups, education)
    - **Option E:** Display / Stylized (Syne, Clash Display - creative agency, high-end design, artsy, bold headers)
 
-8. **Are there any third-party integrations needed in the blueprint?**
+5. **Are there any third-party integrations needed in the blueprint?**
    - **Option A:** Simple Lead Capture (Email contact forms, newsletter signup integrations via Resend/Mailchimp)
    - **Option B:** E-commerce & Payments (Stripe checkout, product payments, pricing tier redirects)
    - **Option C:** Authentication & Database (Clerk / Supabase login, user profiles, backend storage)
@@ -87,7 +66,7 @@ Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3
    - **Option E:** Interactive Data / Analytics (Recharts/Chart.js graphs, Google Analytics tracking)
    - **Option F:** None / Static build only (pure frontend components/layouts)
 
-9. **What theme/mode behavior do you want to implement?**
+6. **What theme/mode behavior do you want to implement?**
    - **Option A:** Forced Dark Mode only (sleek, developer-focused, gaming, entertainment, creative)
    - **Option B:** Forced Light Mode only (clean, medical, corporate, high WCAG accessibility)
    - **Option C:** Dynamic Mode Toggle (user can switch between Light and Dark mode using a button/switch)
