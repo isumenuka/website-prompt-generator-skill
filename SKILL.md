@@ -23,7 +23,51 @@ If images are present but you can't view them, ask the user to re-upload or past
 
 ---
 
-## 🎨 Step 0: UI/UX Design Intelligence Retrieval & Application (REQUIRED)
+## 💬 Step 0A: Pre-Generation Questionnaire (Interactive Sessions Only)
+
+In active conversations (interactive sessions), before executing the UI/UX script or generating the build prompt/blueprint, you MUST present a short, user-friendly multiple-choice questionnaire to clarify the project requirements. This helps in tailoring the design system and tech stack to their exact needs.
+
+Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3C, 4A, 5B"):
+
+1. **What type of website are you building?**
+   - **Option A:** Portfolio / Personal Website (showcasing projects, resume, skills, and contact)
+   - **Option B:** SaaS / Product Landing Page (marketing a software product, features, pricing, testimonials)
+   - **Option C:** Corporate / Agency Website (business services, team, client logos, contact)
+   - **Option D:** E-commerce / Online Store (product listings, shopping cart, checkout experience)
+   - **Option E:** Creative / Immersive Showcase (highly visual, 3D elements, interactive animations, or 3D displays)
+   - **Option F:** Other (Please specify)
+
+2. **What visual style or vibe do you prefer?**
+   - **Option A:** Minimalist & Clean (ample whitespace, subtle borders, high legibility, clean spacing)
+   - **Option B:** Glassmorphism & Neon Glow (frosted glass cards, glowing borders, dark/vibrant contrasts)
+   - **Option C:** Neo-Brutalism (thick dark borders, flat bright colors, retro typography, hard shadows)
+   - **Option D:** Luxury & Editorial (elegant serif headings, muted pastel/monochrome tones, spacious layout)
+   - **Option E:** Dark Mode Tech (deep slate/zinc backgrounds, tech-focused cards, neon teal/purple accents)
+   - **Option F:** No preference / Let the AI decide based on industry
+
+3. **Do you have a preferred color palette?**
+   - **Option A:** Cool Slate & Indigo (sleek, modern tech look)
+   - **Option B:** Deep Trust Blue & Emerald (fintech, professional, clean look)
+   - **Option C:** Vibrant Magenta & Violet (creative, energetic, bold look)
+   - **Option D:** Forest Green & Warm Sand (earthy, natural, organic, cozy look)
+   - **Option E:** High-Contrast Monochromatic (pure black, white, gray, stark contrast look)
+   - **Option F:** Custom (Please specify your preferred colors or hex codes)
+
+4. **What is your target tech stack?**
+   - **Option A:** HTML + CSS (Vanilla with Tailwind CSS, lightweight single-page)
+   - **Option B:** React + Vite + Tailwind CSS + Framer Motion (Modern dynamic SPA)
+   - **Option C:** Next.js (App Router) + Tailwind CSS + shadcn/ui (Full-stack ready template)
+   - **Option D:** SvelteKit or Vue / Nuxt + Tailwind CSS
+   - **Option E:** Other (Please specify, e.g., Astro, mobile framework)
+
+5. **What level of animation and interactivity do you want?**
+   - **Option A:** Subtle / Minimal (simple fade-ins, hover states, transition-colors)
+   - **Option B:** Engaging & Interactive (scroll-reveal, card staggers, smooth scroll, hover lift/tilt)
+   - **Option C:** Immersive / Advanced (GSAP ScrollTrigger pinning/scrubbing, Anime.js morphs, Spline/R3F 3D effects)
+
+---
+
+## 🎨 Step 0B: UI/UX Design Intelligence Retrieval & Application (REQUIRED)
 
 Before writing any build prompt or blueprint, execute the bundled search script in this skill to retrieve layout, typography, and color recommendations. Relying on this curated database ensures that the generated design system is industry-tested, accessibility-compliant, and perfectly matched to the product's business domain, rather than relying on guessed or generic color choices.
 
@@ -80,7 +124,7 @@ In active conversations, present a brief summary of the design tokens (retrieved
 
 ### Approach
 
-Act as an expert technical UI/UX designer and frontend architect. The resulting prompt must leave nothing to the imagination — specify the exact tech stack, colors, typography, layout, animations, and content structure. Incorporate all findings from **Step 0: UI/UX Design Intelligence Retrieval**.
+Act as an expert technical UI/UX designer and frontend architect. The resulting prompt must leave nothing to the imagination — specify the exact tech stack, colors, typography, layout, animations, and content structure. Incorporate all findings from **Step 0B: UI/UX Design Intelligence Retrieval**.
 
 **CRITICAL STEP**: This skill comes bundled with a universal component-prompt library in `references/core/animated-web-prompts.md`. Before generating, use `grep_search` or `view_file` to find 1–3 entries that match the user's requested style or domain. **Analyze** them — study their structure, level of technical specificity, the bracket/placeholder convention, and the animation techniques — then generate a **completely new** prompt with your own components and animations. Do NOT copy a sample verbatim or hand the library text back as the output: the samples set the quality bar and demonstrate the format, they are not the deliverable. Do not skip this step!
 Additionally, if Anime.js is requested or is optimal for the animation requirements (like SVG morphing/drawing, complex stagger grids, or custom timelines), load `references/animations/animejs/animejs-api-reference.md` and `references/animations/animejs/animejs-examples.md` to ensure correct syntax, tree-shakeable imports, and clean React component structures (using `createScope` for component lifecycle cleanup).
@@ -190,7 +234,7 @@ If multiple images repeat the same pattern, group them — don't force ten secti
 
 **Load `references/core/design-system-tokens.md` now** — match the palette template that most closely resembles the images, copy its CSS variables, and adjust hex values.
 
-Then, blend these with the output of the **Step 0 UI/UX Pro Max** search results. Lock in the absolute design variables:
+Then, blend these with the output of the **Step 0B UI/UX Pro Max** search results. Lock in the absolute design variables:
 - **Palette**: Inferred CSS variables with exact HSL/HEX values from both visual findings and the Pro Max recommended design system.
 - **Typography**: Families + weights + `clamp()` scale + tracking/leading (using the Google Fonts pairings returned by the Pro Max script).
 - **Spacing / radius / elevation**: Section padding rhythm, container max-width, corner radii, shadow recipes (utilize the specific Pro Max guidelines on Spacing & Interaction).
@@ -336,18 +380,20 @@ Do NOT load all reference files at once. Load only what you need for the current
 | `references/animations/[library-name]/` or `references/3d-webgl/[library-name]/` | When a specific 3D/animation library is requested | Check folders under `references/animations/` (such as `motion-framer`, `react-spring-physics`, `scroll-reveal-libraries`, `animated-component-libraries` (Magic UI, React Bits)) or `references/3d-webgl/` (such as `react-three-fiber`, `spline-interactive`, `threejs-webgl`, `substance-3d-texturing`, `web3d-integration-patterns`, `lightweight-3d-effects`) for their respective `SKILL_REF.md` manuals and API guides. |
 
 ### Loading sequence for Image Blueprint Mode
-1. Run Step 0 (UI/UX Pro Max search command for design system and optional stack).
-2. Load `core/ui-analysis-system.md` → run the Quick Checklist on every image.
-3. Load `core/design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
-4. Load appropriate reference files from `references/responsive-design/` (such as `breakpoint-strategies.md` or `container-queries.md`) to plan responsive structures.
-5. Load `core/section-patterns.md` → match each image to a section pattern.
-6. If using any animation or 3D library (Anime.js, GSAP, Framer Motion, R3F, Spline, React Spring, WebGL, Magic UI, Scroll Reveal), load its respective reference files or folder under `references/animations/` or `references/3d-webgl/` to read correct implementation instructions.
-7. Grep `core/animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
+1. Step 0A: Questionnaire — ask the user for specific preferences, goals, or constraints regarding the project.
+2. Run Step 0B (UI/UX Pro Max search command for design system and optional stack).
+3. Load `core/ui-analysis-system.md` → run the Quick Checklist on every image.
+4. Load `core/design-system-tokens.md` → match the palette template, blend with the Pro Max output, and lock CSS variables.
+5. Load appropriate reference files from `references/responsive-design/` (such as `breakpoint-strategies.md` or `container-queries.md`) to plan responsive structures.
+6. Load `core/section-patterns.md` → match each image to a section pattern.
+7. If using any animation or 3D library (Anime.js, GSAP, Framer Motion, R3F, Spline, React Spring, WebGL, Magic UI, Scroll Reveal), load its respective reference files or folder under `references/animations/` or `references/3d-webgl/` to read correct implementation instructions.
+8. Grep `core/animated-web-prompts.md` for 1–2 entries matching the vibe → match their specificity level and technique, but write original components and animations (never copy the wording).
 
 ### Loading sequence for Text Mode
-1. Run Step 0 (UI/UX Pro Max search command for design system and stack).
-2. If using any animation or 3D library, load its respective reference manuals/folders under `references/animations/` or `references/3d-webgl/`.
-3. Grep `core/animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
-4. Load `core/design-system-tokens.md` if you need to define additional CSS variables or font details.
-5. Load appropriate reference files from `references/responsive-design/` (such as `details.md` or `fluid-layouts.md`) to establish responsive behaviors and scales.
-6. Load `core/section-patterns.md` if a specific section type needs a detailed build spec.
+1. Step 0A: Questionnaire — ask the user for specific preferences, goals, or constraints regarding the project.
+2. Run Step 0B (UI/UX Pro Max search command for design system and stack).
+3. If using any animation or 3D library, load its respective reference manuals/folders under `references/animations/` or `references/3d-webgl/`.
+4. Grep `core/animated-web-prompts.md` for 1–3 matching entries → use as a reference for format and quality bar, then generate something new.
+5. Load `core/design-system-tokens.md` if you need to define additional CSS variables or font details.
+6. Load appropriate reference files from `references/responsive-design/` (such as `details.md` or `fluid-layouts.md`) to establish responsive behaviors and scales.
+7. Load `core/section-patterns.md` if a specific section type needs a detailed build spec.
