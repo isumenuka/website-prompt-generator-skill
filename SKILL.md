@@ -27,7 +27,7 @@ If images are present but you can't view them, ask the user to re-upload or past
 
 In active conversations (interactive sessions), before executing the UI/UX script or generating the build prompt/blueprint, you MUST present a short, user-friendly multiple-choice questionnaire to clarify the project requirements. This helps in tailoring the design system and tech stack to their exact needs.
 
-Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3C, 4A, 5B"):
+Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3C, 4A, 5B, 6A, 7B, 8F, 9C"):
 
 1. **What type of website are you building?**
    - **Option A:** Portfolio / Personal Website (showcasing projects, resume, skills, and contact)
@@ -64,6 +64,34 @@ Ask the user to answer the following questions (e.g. by replying with "1A, 2B, 3
    - **Option A:** Subtle / Minimal (simple fade-ins, hover states, transition-colors)
    - **Option B:** Engaging & Interactive (scroll-reveal, card staggers, smooth scroll, hover lift/tilt)
    - **Option C:** Immersive / Advanced (GSAP ScrollTrigger pinning/scrubbing, Anime.js morphs, Spline/R3F 3D effects)
+
+6. **What is the primary layout and structure preference?**
+   - **Option A:** Single-page scrollable landing page (best for quick conversions/simple products)
+   - **Option B:** Multi-page site (Home, About, Services, Contact, Blog, etc.)
+   - **Option C:** Dashboard / Web Application Interface (interactive charts, tables, sidebar navigation, profiles)
+   - **Option D:** Documentation / Resource Center (search bar, nested sidebar menu, article grid, docs layout)
+   - **Option E:** Minimalist "Under Construction" / Link-in-bio (single-screen hero with quick CTA/links)
+
+7. **What typography style fits the brand best?**
+   - **Option A:** Modern Sans-Serif (Inter, Roboto, Outfit - clean, neutral, standard tech/SaaS)
+   - **Option B:** Elegant Serif (Instrument Serif, Playfair Display - editorial, luxury, fashion, boutique)
+   - **Option C:** Technical Mono (JetBrains Mono, Fira Code - developer tools, Web3, database portals)
+   - **Option D:** Geometric & Friendly (Lexend, Montserrat, Poppins - marketing, SaaS, startups, education)
+   - **Option E:** Display / Stylized (Syne, Clash Display - creative agency, high-end design, artsy, bold headers)
+
+8. **Are there any third-party integrations needed in the blueprint?**
+   - **Option A:** Simple Lead Capture (Email contact forms, newsletter signup integrations via Resend/Mailchimp)
+   - **Option B:** E-commerce & Payments (Stripe checkout, product payments, pricing tier redirects)
+   - **Option C:** Authentication & Database (Clerk / Supabase login, user profiles, backend storage)
+   - **Option D:** Headless CMS (Sanity, Strapi, Contentful for blog posts/articles/portfolio items)
+   - **Option E:** Interactive Data / Analytics (Recharts/Chart.js graphs, Google Analytics tracking)
+   - **Option F:** None / Static build only (pure frontend components/layouts)
+
+9. **What theme/mode behavior do you want to implement?**
+   - **Option A:** Forced Dark Mode only (sleek, developer-focused, gaming, entertainment, creative)
+   - **Option B:** Forced Light Mode only (clean, medical, corporate, high WCAG accessibility)
+   - **Option C:** Dynamic Mode Toggle (user can switch between Light and Dark mode using a button/switch)
+   - **Option D:** System Default Auto-Switch (automatically adapts based on user's OS color scheme preference)
 
 ---
 
